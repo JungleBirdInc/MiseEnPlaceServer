@@ -1,0 +1,32 @@
+{
+  "name": "miseenplaceserver",
+  "version": "1.0.0",
+  "description": "Server Side with NodeJS/Express/Sequelize",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeoffreyIanWard/MiseEnPlaceServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GeoffreyIanWard/MiseEnPlaceServer/issues"
+  },
+  "homepage": "https://github.com/GeoffreyIanWard/MiseEnPlaceServer#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "sequelize": "^5.19.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.15.0",
+    "eslint-plugin-react-hooks": "^1.7.0"
+  }
+}
