@@ -11,7 +11,7 @@ const {
 const sequelize = new Sequelize(DATABASE, USER_NAME, USER_PASSWORD, {
     host: HOST,
     port: DB_PORT,
-    dialect: 'mysql',
+    dialect: 'Postgres',
 });
 
 // test the db connection
