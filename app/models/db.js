@@ -444,7 +444,17 @@ const Reps = sequelize.define('reps', {
     dist_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,
