@@ -121,6 +121,57 @@ app.post('/api/createDist', (req, res) => {
         });
 });
 
+//**********************
+// Create Product
+//**********************
+app.post('/api/createProduct', (req, res) => {
+    const {
+        upc,
+        product_name,
+        category_id,
+        sub_category_id,
+        size,
+        notes,
+        tare,
+        dist_id,
+        price,
+    } = req.body;
+    models.Products.findOrCreate({
+        where: {
+            upc,
+        },
+        defaults: {
+            upc,
+            product_name,
+            category_id,
+            sub_category_id,
+            size,
+            notes,
+            tare,
+        },
+        returning: true,
+        plain: true,
+    })
+        .then((product) => {
+            models.DistributorsProducts.findOrCreate({
+                where: {
+                    products_id: product[0].id,
+                },
+                defaults: {
+                    dist_id,
+                    price,
+                    products_id: product[0].id,
+                    
+                }
+            })
+        })
+        .then((data) => {
+            res.send(201);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
 
 
 
