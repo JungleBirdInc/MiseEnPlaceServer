@@ -298,11 +298,21 @@ const Organizations = sequelize.define('organizations', {
         allowNull: true,
     },
     phone: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: true,
     },
     email: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
         allowNull: true,
     },
 }, {
@@ -386,7 +396,7 @@ const Reps = sequelize.define('reps', {
         allowNull: true,
     },
     phone: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
     },
     dist_id: {
