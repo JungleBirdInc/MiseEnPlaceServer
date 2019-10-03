@@ -82,12 +82,24 @@ const Distributors = sequelize.define('distributors', {
         type: Sequelize.STRING,
         allowNull: true,
     },
+    city: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
     state: {
         type: Sequelize.STRING,
         allowNull: true,
     },
     zip: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    phone: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    email: {
+        type: Sequelize.STRING,
         allowNull: true,
     },
     createdAt: {
@@ -432,7 +444,17 @@ const Reps = sequelize.define('reps', {
     dist_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,

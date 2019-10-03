@@ -173,6 +173,31 @@ app.post('/api/createProduct', (req, res) => {
         });
 });
 
+//**********************
+// Create Rep
+//**********************
+app.post('/api/createRep', (req, res) => {
+    const {
+        first_name,
+        last_name,
+        email,
+        phone,
+        dist_id,
+    } = req.body;
+    models.Reps.create({
+        first_name,
+        last_name,
+        email,
+        phone,
+        dist_id,
+    })
+        .then(() => {
+            res.send(201);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
 
 
 
