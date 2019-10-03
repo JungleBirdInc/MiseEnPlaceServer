@@ -31,7 +31,9 @@ app.use(express.static(pathway));
 
 
 
+//**********************
 // Create User
+//**********************
 app.post('/api/createUser', (req, res) => {
     const {
         role_id,
@@ -57,7 +59,9 @@ app.post('/api/createUser', (req, res) => {
         });
 });
 
+//**********************
 // Create Organization
+//**********************
 app.post('/api/createOrg', (req, res) => {
     const {
         org_name,
@@ -86,7 +90,36 @@ app.post('/api/createOrg', (req, res) => {
             console.error(error);
         });
 });
-    
+
+//**********************
+// Create Distributor
+//**********************
+app.post('/api/createDist', (req, res) => {
+    const {
+        name,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+    } = req.body;
+    models.Distributors.create({
+        name,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+    })
+        .then(() => {
+            res.send(201);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
 
 
 
