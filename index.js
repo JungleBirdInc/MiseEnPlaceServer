@@ -22,6 +22,16 @@ app.use(session({
 }));
 // date: models.sequelize.literal('CURRENT_TIMESTAMP'),
 
+// Variable that syncs up our two repo paths
+console.log(__dirname);
+const pathway = path.join(__dirname, '../miseenplace/src/index.html');
+
+// serve static files
+app.use(express.static(pathway));
+
+
+
+// Create User
 app.post('/api/createUser', (req, res) => {
     const {
         role_id,
@@ -47,12 +57,35 @@ app.post('/api/createUser', (req, res) => {
         });
 });
 
-// Variable that syncs up our two repo paths
-console.log(__dirname);
-const pathway = path.join(__dirname, '../miseenplace/src/index.html');
-
-// serve static files
-app.use(express.static(pathway));
+// Create Organization
+app.post('/api/createOrg', (req, res) => {
+    const {
+        org_name,
+        master_inventory,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+    } = req.body;
+    models.Organizations.create({
+        org_name,
+        master_inventory,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+    })
+        .then(() => {
+            res.send(201);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
 
 
 
@@ -65,7 +98,7 @@ app.use(express.static(pathway));
 
 // force requests to client files
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(`${__dirname}/../client/dist/index.html`));
+    res.sendFile(path.resolve(pathway));
 });
 
 const port = process.env.port || 3000;
