@@ -89,7 +89,17 @@ const Distributors = sequelize.define('distributors', {
     zip: {
         type: Sequelize.INTEGER,
         allowNull: true,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,
