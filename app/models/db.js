@@ -131,7 +131,17 @@ const DistributorsProducts = sequelize.define('distributors_products', {
     price: {
         type: Sequelize.INTEGER,
         allowNull: true,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 },{
     freezeTableName: true,
     timeStamps: false,
@@ -376,6 +386,16 @@ const Products = sequelize.define('products', {
     },
     tare: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
         allowNull: true,
     },
 }, {
