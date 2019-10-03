@@ -378,6 +378,16 @@ const Products = sequelize.define('products', {
         type: Sequelize.INTEGER,
         allowNull: true,
     },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,
