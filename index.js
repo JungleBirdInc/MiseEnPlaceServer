@@ -152,8 +152,20 @@ app.post('/api/createProduct', (req, res) => {
         returning: true,
         plain: true,
     })
+        .then((product) => {
+            console.log(product);
+            models.DistributorsProducts.findOrCreate({
+                where: {
+                    products_id: product[0].id,
+                },
+                defaults: {
+                    dist_id,
+                    products_id: product[0].id,
+                    price,
+                }
+            })
+        })
         .then((data) => {
-            console.log(data);
             res.send(201);
         })
         .catch((error) => {
