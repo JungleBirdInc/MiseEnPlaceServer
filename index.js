@@ -137,16 +137,17 @@ app.post('/api/createProduct', (req, res) => {
         price,
     } = req.body;
     models.Products.findOrCreate({
-        upc,
-        product_name,
-        category_id,
-        sub_category_id,
-        size,
-        notes,
-        tare,
-    }, {
         where: {
             upc,
+        },
+        defaults: {
+            upc,
+            product_name,
+            category_id,
+            sub_category_id,
+            size,
+            notes,
+            tare,
         },
         returning: true,
         plain: true,
