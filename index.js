@@ -60,6 +60,49 @@ app.post('/api/createUser', (req, res) => {
 });
 
 //**********************
+// Update User
+//**********************
+app.put('/api/updateUser/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    const {
+        role_id,
+        first_name,
+        last_name,
+        email,
+        org_id,
+        password,
+    } = req.body;
+    console.log(req.params);
+    console.log(req.body);
+    models.Users.update({
+        role_id,
+        first_name,
+        last_name,
+        email,
+        org_id,
+        password,
+    }, {
+        where: {
+            id,
+        },
+        returning: true,
+        plain: true,
+    })
+    .then((user) => {
+        res.send(201);
+    })
+    .catch((error) => {
+        console.error(error);
+    })
+})
+
+//**********************
+// Delete User
+//**********************
+
+//**********************
 // Create Organization
 //**********************
 app.post('/api/createOrg', (req, res) => {
