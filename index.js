@@ -29,7 +29,7 @@ const pathway = path.join(__dirname, '../miseenplace/src/index.html');
 // serve static files
 app.use(express.static(pathway));
 
-
+//*************************************************************************************** */
 
 //**********************
 // Create User
@@ -74,8 +74,6 @@ app.put('/api/updateUser/:id', (req, res) => {
         org_id,
         password,
     } = req.body;
-    console.log(req.params);
-    console.log(req.body);
     models.Users.update({
         role_id,
         first_name,
@@ -122,6 +120,9 @@ app.delete('/api/deleteUser/:id', (req, res) => {
     });
 })
 
+//*************************************************************************************** */
+
+
 //**********************
 // Create Organization
 //**********************
@@ -155,6 +156,73 @@ app.post('/api/createOrg', (req, res) => {
 });
 
 //**********************
+// Update Organization
+//**********************
+app.put('/api/updateOrg/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    const {
+        org_name,
+        master_inventory,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+    } = req.body;
+    models.Organizations.update({
+        org_name,
+        master_inventory,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+    }, {
+        where: {
+            id,
+        },
+        returning: true,
+        plain: true,
+    })
+        .then((org) => {
+            res.status(201).send(org);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        })
+})
+
+//**********************
+// Delete Org
+//**********************
+app.delete('/api/deleteOrg/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Organizations.destroy({
+        where: {
+            id,
+        },
+    })
+        .then(() => {
+            res.send({
+                deleted: true
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        });
+})
+
+//*************************************************************************************** */
+
+//**********************
 // Create Distributor
 //**********************
 app.post('/api/createDist', (req, res) => {
@@ -183,6 +251,71 @@ app.post('/api/createDist', (req, res) => {
             console.error(error);
         });
 });
+
+//**********************
+// Update Distributor
+//**********************
+app.put('/api/updateDist/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    const {
+        name,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+    } = req.body;
+    models.Distributors.update({
+        name,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+    }, {
+        where: {
+            id,
+        },
+        returning: true,
+        plain: true,
+    })
+        .then((org) => {
+            res.status(201).send(org);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        })
+})
+
+//**********************
+// Delete Distributor
+//**********************
+app.delete('/api/deleteDist/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Organizations.destroy({
+        where: {
+            id,
+        },
+    })
+        .then(() => {
+            res.send({
+                deleted: true
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        });
+});
+
+//*************************************************************************************** */
 
 //**********************
 // Create Product
@@ -236,6 +369,8 @@ app.post('/api/createProduct', (req, res) => {
         });
 });
 
+//*************************************************************************************** */
+
 //**********************
 // Create Rep
 //**********************
@@ -261,6 +396,66 @@ app.post('/api/createRep', (req, res) => {
             console.error(error);
         });
 });
+
+//**********************
+// Update Rep
+//**********************
+app.put('/api/updateRep/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    const {
+        first_name,
+        last_name,
+        email,
+        phone,
+    } = req.body;
+    models.Reps.update({
+        org_name,
+        first_name,
+        last_name,
+        email,
+        phone,
+    }, {
+        where: {
+            id,
+        },
+        returning: true,
+        plain: true,
+    })
+        .then((org) => {
+            res.status(201).send(org);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        })
+})
+
+//**********************
+// Delete Distributor
+//**********************
+app.delete('/api/deleteRep/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Reps.destroy({
+        where: {
+            id,
+        },
+    })
+        .then(() => {
+            res.send({
+                deleted: true
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        });
+});
+
+//*************************************************************************************** */
 
 
 
