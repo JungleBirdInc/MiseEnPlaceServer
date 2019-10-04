@@ -494,15 +494,19 @@ app.post('/api/initialize', (req, res) => {
         rep_id,
         total_price,
         masterSet, //an array with inventory objects for par list
-        weeklySet, //an array with inventory objects for weekly operating levels
+        weeklySet, //an array with inventory objects for current inventory level
     } = req.body;
 
-    
+    const sendBackInfo = {
+        pars: [],
+        stock: [],
+    }
+    let currentLog = null;
 
     const makeMaster = () => { 
         return models.Logs.create({
             admin_id,
-            type,
+            type: 1,
             dist_id,
             rep_id,
         }, {
@@ -511,17 +515,6 @@ app.post('/api/initialize', (req, res) => {
         }
     )
     .then((log) => {
-        console.log(log);
-        // let payments = masterSet.map((masterItem) => {
-        //     return models.DistributorsProducts.findOne({
-        //         where: {
-        //             id: masterItem.dist_products_id,
-        //         },
-        //         attributes: [price],
-        //     });
-        // });
-        // console.log(payment);
-
         return masterSet.forEach((masterItem) => {
             models.LogsProducts.create({
                 log_id: log.id,
@@ -530,7 +523,7 @@ app.post('/api/initialize', (req, res) => {
             });
         });
     })
-    .then(() => {
+    .then((result) => {
         res.status(201).send('Master Initialized');
     })
     .catch((error) => {
@@ -538,8 +531,43 @@ app.post('/api/initialize', (req, res) => {
     });
     };
 
+    const makeWeekly = () => {
+        let payments = weeklySet.map((weeklyItem) => weeklyItem.price * weeklyItem.qty);
+        let totalPayment = payments.reduce((a, b) => a + b, 0)
+        return models.Logs.create({
+            admin_id,
+            type: 2,
+            dist_id,
+            rep_id,
+            total_price: totalPayment,
+        }, {
+            returning: true,
+            plain: true,
+        }
+        )
+            .then((log) => {
+                return weeklySet.forEach((weeklyItem) => {
+                    models.LogsProducts.create({
+                        log_id: log.id,
+                        dist_products_id: weeklyItem.id,
+                        qty: weeklyItem.qty,
+                    });
+                });
+            })
+            .then((result) => {
+                res.status(201).send('Weekly Initialized');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
 
-    makeMaster();
+    Promise.all([makeMaster(), makeWeekly()])
+    .then((values) => {
+        console.log(values);
+    })
+    // makeMaster();
+    // makeWeekly();
 })
 
 

@@ -261,7 +261,17 @@ const LogsProducts = sequelize.define('logs_products', {
     qty: {
         type: Sequelize.INTEGER,
         allowNull: true,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: true,
@@ -292,7 +302,17 @@ const OpenBottles = sequelize.define('open_bottles', {
     weight: {
         type: Sequelize.INTEGER,
         allowNull: false,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: true,
@@ -567,6 +587,17 @@ const Users = sequelize.define('users', {
 // Relationships
 Products.hasMany(DistributorsProducts);
 DistributorsProducts.belongsTo(Products);
+
+DistributorsProducts.hasMany(LogsProducts);
+LogsProducts.belongsTo(DistributorsProducts);
+
+Distributors.hasMany(Reps);
+Reps.belongsTo(Distributors);
+
+Organizations.hasMany(Distributors);
+Distributors.hasMany(Organizations);
+
+
 
 
 
