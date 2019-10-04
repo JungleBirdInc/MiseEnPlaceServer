@@ -369,6 +369,32 @@ app.post('/api/createProduct', (req, res) => {
         });
 });
 
+//***************************
+// Get a DistributorProduct
+//***************************
+app.get('/api/getDistProd/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.DistributorsProducts.findOne({
+        where: {
+            id,
+        },
+        include: [{
+            model: models.Products,
+        }]
+    })
+        .then((result) => {
+            console.log(result);
+            res.json(result);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+
+
+
 //*************************************************************************************** */
 
 //**********************
@@ -456,6 +482,69 @@ app.delete('/api/deleteRep/:id', (req, res) => {
 });
 
 //*************************************************************************************** */
+
+//**********************
+// Initialize Inventory
+//**********************
+app.post('/api/initialize', (req, res) => {
+    const {
+        admin_id,
+        type,
+        dist_id,
+        rep_id,
+        total_price,
+        masterSet, //an array with inventory objects for par list
+        weeklySet, //an array with inventory objects for weekly operating levels
+    } = req.body;
+
+    
+
+    const makeMaster = () => { 
+        return models.Logs.create({
+            admin_id,
+            type,
+            dist_id,
+            rep_id,
+        }, {
+        returning: true,
+        plain: true,
+        }
+    )
+    .then((log) => {
+        console.log(log);
+        // let payments = masterSet.map((masterItem) => {
+        //     return models.DistributorsProducts.findOne({
+        //         where: {
+        //             id: masterItem.dist_products_id,
+        //         },
+        //         attributes: [price],
+        //     });
+        // });
+        // console.log(payment);
+
+        return masterSet.forEach((masterItem) => {
+            models.LogsProducts.create({
+                log_id: log.id,
+                dist_products_id: masterItem.id,
+                qty: masterItem.qty,
+            });
+        });
+    })
+    .then(() => {
+        res.status(201).send('Master Initialized');
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+    };
+
+
+    makeMaster();
+})
+
+
+//*************************************************************************************** */
+
 
 
 
