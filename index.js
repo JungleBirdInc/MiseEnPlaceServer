@@ -91,16 +91,36 @@ app.put('/api/updateUser/:id', (req, res) => {
         plain: true,
     })
     .then((user) => {
-        res.send(201);
+        res.status(201).send(user);
     })
     .catch((error) => {
         console.error(error);
+        res.status(500).send(error);
     })
 })
 
 //**********************
 // Delete User
 //**********************
+app.delete('/api/deleteUser/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Users.destroy({
+        where: {
+            id,
+        },
+    })
+    .then(() => {
+        res.send({
+            deleted: true
+        });
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send(error);
+    });
+})
 
 //**********************
 // Create Organization
