@@ -505,6 +505,30 @@ app.delete('/api/deleteRep/:id', (req, res) => {
         });
 });
 
+//******************************
+// Get ALL Distributor Reps
+//******************************
+app.get('/api/getAllDistReps/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Reps.findAll({
+        where: {
+            dist_id: id,
+        },
+        include: [{
+            model: models.Products,
+        }]
+    })
+        .then((result) => {
+            console.log(result);
+            res.json(result);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+
 //*************************************************************************************** */
 
 //**********************
