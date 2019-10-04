@@ -393,6 +393,30 @@ app.get('/api/getDistProd/:id', (req, res) => {
         });
 });
 
+//******************************
+// Get ALL DistributorProducts
+//******************************
+app.get('/api/getAllDistProd/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.DistributorsProducts.findAll({
+        where: {
+            dist_id: id,
+        },
+        include: [{
+            model: models.Products,
+        }]
+    })
+        .then((result) => {
+            console.log(result);
+            res.json(result);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+
 
 
 //*************************************************************************************** */
