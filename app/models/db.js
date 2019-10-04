@@ -11,7 +11,7 @@ const {
 const sequelize = new Sequelize(DATABASE, USER_NAME, USER_PASSWORD, {
     host: HOST,
     port: DB_PORT,
-    dialect: 'Postgres',
+    dialect: 'postgres',
 });
 
 // test the db connection
@@ -29,7 +29,7 @@ sequelize.authenticate()
  */
 const BtlSize = sequelize.define('btl_size', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
@@ -48,7 +48,7 @@ const BtlSize = sequelize.define('btl_size', {
  */
 const Categories = sequelize.define('categories', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
@@ -70,7 +70,7 @@ const Categories = sequelize.define('categories', {
  */
 const Distributors = sequelize.define('distributors', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
@@ -82,14 +82,36 @@ const Distributors = sequelize.define('distributors', {
         type: Sequelize.STRING,
         allowNull: true,
     },
+    city: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
     state: {
         type: Sequelize.STRING,
         allowNull: true,
     },
     zip: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
-    }
+    },
+    phone: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    email: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,
@@ -106,22 +128,32 @@ const Distributors = sequelize.define('distributors', {
  */
 const DistributorsProducts = sequelize.define('distributors_products', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
     dist_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     products_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     price: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 },{
     freezeTableName: true,
     timeStamps: false,
@@ -137,7 +169,7 @@ const DistributorsProducts = sequelize.define('distributors_products', {
  */
 const LogTypes = sequelize.define('log_types', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
@@ -163,32 +195,32 @@ const LogTypes = sequelize.define('log_types', {
  */
 const Logs = sequelize.define('logs', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
     admin_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     type: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     dist_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
     rep_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
     date: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     total_price: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
     }
 }, {
@@ -205,22 +237,22 @@ const Logs = sequelize.define('logs', {
  * qty: the quantity of the item being recorded in the log
  * 
  */
-const LogsProducts = sequelize.define('logs', {
+const LogsProducts = sequelize.define('logs_products', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
     log_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     dist_products_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     qty: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
     }
 }, {
@@ -236,22 +268,22 @@ const LogsProducts = sequelize.define('logs', {
  * product_id: refers to the DistributorsProducts table
  * weight: the weight of the bottle recorded as an integer. ALL WEIGHTS MUST BE CONSISTENT.
  */
-const OpenBottles = sequelize.define('logs', {
+const OpenBottles = sequelize.define('open_bottles', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
     org_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     product_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     weight: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     }
 }, {
@@ -267,9 +299,9 @@ const OpenBottles = sequelize.define('logs', {
  * state: 2 character abbreviation only
  * zip: 5 digit american postal code
  */
-const Organizations = sequelize.define('logs', {
+const Organizations = sequelize.define('organizations', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
@@ -278,7 +310,7 @@ const Organizations = sequelize.define('logs', {
         allowNull: false,
     },
     master_inventory: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
     address: {
@@ -294,15 +326,25 @@ const Organizations = sequelize.define('logs', {
         allowNull: true,
     },
     zip: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
     phone: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.STRING,
         allowNull: true,
     },
     email: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
         allowNull: true,
     },
 }, {
@@ -324,14 +366,14 @@ const Organizations = sequelize.define('logs', {
  * size: size of the product container (see BtlSize table)
  * tare: the weight of the empty bottle. Should be consistent with weight category from OpenBottles table
  */
-const Products = sequelize.define('logs', {
+const Products = sequelize.define('products', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
     upc: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
     product_name: {
@@ -339,11 +381,11 @@ const Products = sequelize.define('logs', {
         allowNull: false,
     },
     category_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     sub_category_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
     size: {
@@ -355,7 +397,17 @@ const Products = sequelize.define('logs', {
         allowNull: true,
     },
     tare: {
-        type: Sequilize.INTEGER(11),
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
         allowNull: true,
     },
 }, {
@@ -367,9 +419,9 @@ const Products = sequelize.define('logs', {
  * Reps Table
  * dist_id: the id of the distributor associated with this rep
  */
-const Reps = sequelize.define('logs', {
+const Reps = sequelize.define('reps', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
@@ -386,13 +438,23 @@ const Reps = sequelize.define('logs', {
         allowNull: true,
     },
     phone: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     dist_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,
@@ -405,9 +467,9 @@ const Reps = sequelize.define('logs', {
  * (2) Employee - has limited access
  * 
  */
-const Roles = sequelize.define('logs', {
+const Roles = sequelize.define('roles', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
@@ -425,14 +487,14 @@ const Roles = sequelize.define('logs', {
  * category_id: the id of the main category of the product
  * subcategory_id: the subcategory (White Wines, Whiskey, Soft Drinks, Bar Supplies, etc)
  */
-const Subcategories = sequelize.define('logs', {
+const Subcategories = sequelize.define('subcategories', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
     category_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     subcategory_name: {
@@ -450,14 +512,14 @@ const Subcategories = sequelize.define('logs', {
  * org_id: the id attached to their organization
  * password: may not be needed, depending on auth used
  */
-const Users = sequelize.define('logs', {
+const Users = sequelize.define('users', {
     id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
     role_id: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     first_name: {
@@ -473,16 +535,26 @@ const Users = sequelize.define('logs', {
         allowNull: false,
     },
     org_id: {
-        type: Sequelize.INTEGER(11),
-        allowNull: false,
+        type: Sequelize.INTEGER,
+        allowNull: true,
     },
     password: {
         type: Sequelize.STRING,
         allowNull: true,
     },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
-    timeStamps: true,
+    timeStamps: false,
 });
 
 
