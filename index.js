@@ -401,13 +401,38 @@ app.get('/api/getDist/:distId', (req, res) => {
     .then((dist) => {
         res.status(200).json(dist);
     })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).json(error);
+    })
 })
 
 //**********************
 // Get All Distributors
 //**********************
-app.get('/api/getAllDistributors/:orgId', (req, res) => {
-
+app.get('/api/getAllDists/:orgId', (req, res) => {
+    const { 
+        orgId,
+    } = req.params;
+    console.log(orgId);
+    models.DistOrgs.findAll({
+        where: {
+            org_id: orgId,
+        },
+        include: [{
+            model: models.Distributors,
+            include: [{
+                model: models.Reps,
+            }]
+        }]
+    })
+        .then((dists) => {
+            res.status(200).json(dists);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json(error);
+        })
 })
 
 //*************************************************************************************** */

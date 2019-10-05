@@ -74,11 +74,17 @@ const DistOrgs = sequelize.define('dist_org', {
         autoIncrement: true,
         primaryKey: true,
     },
-    dist_id: {
+    distributorOrganizationId: {
+        field: 'dist_id',
         type: Sequelize.INTEGER,
         allowNull: true,
     },
-    org_id: {
+    // dist_id: {
+    //     type: Sequelize.INTEGER,
+    //     allowNull: true,
+    // },
+    organizationId: {
+        field: 'org_id',
         type: Sequelize.INTEGER,
         allowNull: true,
     },
@@ -111,6 +117,11 @@ const Distributors = sequelize.define('distributors', {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+    },
+    distributorOrganizationId: {
+        field: 'id',
+        type: Sequelize.INTEGER,
+        allowNull: true,
     },
     name: {
         type: Sequelize.STRING,
@@ -638,8 +649,11 @@ LogsProducts.belongsTo(Logs);
 Distributors.hasMany(Reps);
 Reps.belongsTo(Distributors);
 
-Organizations.hasMany(Distributors);
-Distributors.hasMany(Organizations);
+DistOrgs.belongsTo(Distributors);
+DistOrgs.belongsTo(Organizations);
+Distributors.hasMany(DistOrgs);
+Organizations.hasMany(DistOrgs);
+
 
 
 
@@ -652,6 +666,7 @@ module.exports.sequelize = sequelize;
 module.exports.Sequelize = Sequelize;
 module.exports.BtlSize = BtlSize;
 module.exports.Categories = Categories;
+module.exports.DistOrgs = DistOrgs;
 module.exports.Distributors = Distributors;
 module.exports.DistributorsProducts = DistributorsProducts;
 module.exports.LogTypes = LogTypes;
@@ -664,4 +679,3 @@ module.exports.Reps = Reps;
 module.exports.Roles = Roles;
 module.exports.Subcategories = Subcategories;
 module.exports.Users = Users;
-module.exports.DistOrgs = DistOrgs;
