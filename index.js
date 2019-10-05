@@ -269,10 +269,11 @@ app.post('/api/createDist', (req, res) => {
         email,
     })
         .then(() => {
-            res.send(201);
+            res.status(201).send('Distributor Created');
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -394,10 +395,11 @@ app.post('/api/createProduct', (req, res) => {
             })
         })
         .then((data) => {
-            res.send(201);
+            res.status(201).send('Product Created');
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -418,10 +420,11 @@ app.get('/api/getDistProd/:id', (req, res) => {
     })
         .then((result) => {
             console.log(result);
-            res.json(result);
+            res.status(200).json(result);
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -442,10 +445,11 @@ app.get('/api/getAllDistProd/:id', (req, res) => {
     })
         .then((result) => {
             console.log(result);
-            res.json(result);
+            res.status(200).json(result);
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
