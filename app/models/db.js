@@ -61,6 +61,43 @@ const Categories = sequelize.define('categories', {
     timeStamps: false,
 });
 
+
+/* 
+ * Distributor-Organizations Join Table
+ * dist_id: id of a distributor
+ * org_id: id of an org
+ * 
+*/
+const DistOrgs = sequelize.define('dist_org', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    dist_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    org_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+}, {
+    freezeTableName: true,
+    timeStamps: false,
+});
+
+
 /*
  * Distributors Table
  * name: Business name of the distributor
@@ -69,7 +106,8 @@ const Categories = sequelize.define('categories', {
  * zip: 5 digit American postal code
  */
 const Distributors = sequelize.define('distributors', {
-    id: {
+    organizationId: {
+        field: 'id',
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
@@ -250,11 +288,13 @@ const LogsProducts = sequelize.define('logs_products', {
         autoIncrement: true,
         primaryKey: true,
     },
-    log_id: {
+    logId: {
+        field: 'log_id',
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    dist_products_id: {
+    distributorsProductId: {
+        field: 'dist_products_id',
         type: Sequelize.INTEGER,
         allowNull: false,
     },
@@ -447,7 +487,8 @@ const Products = sequelize.define('products', {
  * dist_id: the id of the distributor associated with this rep
  */
 const Reps = sequelize.define('reps', {
-    id: {
+    distributorOrganizationId: {
+        field: 'id',
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
@@ -591,6 +632,9 @@ DistributorsProducts.belongsTo(Products);
 DistributorsProducts.hasMany(LogsProducts);
 LogsProducts.belongsTo(DistributorsProducts);
 
+Logs.hasMany(LogsProducts);
+LogsProducts.belongsTo(Logs);
+
 Distributors.hasMany(Reps);
 Reps.belongsTo(Distributors);
 
@@ -620,3 +664,4 @@ module.exports.Reps = Reps;
 module.exports.Roles = Roles;
 module.exports.Subcategories = Subcategories;
 module.exports.Users = Users;
+module.exports.DistOrgs = DistOrgs;
