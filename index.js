@@ -333,6 +333,14 @@ app.delete('/api/deleteDist/:id', (req, res) => {
         });
 });
 
+//**********************
+// Get A Distributor
+//**********************
+
+//**********************
+// Get All Distributors
+//**********************
+
 //*************************************************************************************** */
 
 //**********************
@@ -560,6 +568,8 @@ app.post('/api/initialize', (req, res) => {
         weeklySet, //an array with inventory objects for current inventory level
     } = req.body;
 
+    // let master = 0;
+
     const makeMaster = () => { 
         return models.Logs.create({
             admin_id,
@@ -572,13 +582,27 @@ app.post('/api/initialize', (req, res) => {
         }
     )
     .then((log) => {
-        return masterSet.forEach((masterItem) => {
+
+        // master = log.id;
+
+        masterSet.forEach((masterItem) => {
             models.LogsProducts.create({
                 log_id: log.id,
                 dist_products_id: masterItem.id,
                 qty: masterItem.qty,
             });
         });
+
+        return log.id;
+    })
+    .then((master) => {
+        models.Organizations.update({
+            master_inventory: master,
+        },{
+            where: {
+                id: admin_id,
+            }
+        })
     })
     .then((result) => {
         res.send('Master Initialized');
@@ -624,6 +648,33 @@ app.post('/api/initialize', (req, res) => {
         console.log(values);
     });
 });
+
+
+//**********************
+// Get Master Inventory
+//**********************
+app.get('/api/getMaster/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Logs.findOne({
+        where: {
+            id,
+            master_inventory: 1,
+        },
+        include: [{
+            model: models.Products,
+        }]
+        })
+    })
+
+
+
+
+//*************************
+// Update Master Inventory
+//*************************
+
 
 //**********************
 // Get Current Inventory
