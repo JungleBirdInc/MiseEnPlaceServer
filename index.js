@@ -670,13 +670,17 @@ app.get('/api/getMaster/:id', (req, res) => {
     } = req.params;
     models.Logs.findOne({
         where: {
-            id,
-            master_inventory: 1,
+            admin_id: id,
+            type: 1,
         },
         include: [{
-            model: models.DistributorsProducts,
-        },{
-            model: models.Products,
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
         }]
         })
         .then((master) => {

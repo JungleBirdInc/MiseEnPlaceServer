@@ -250,11 +250,13 @@ const LogsProducts = sequelize.define('logs_products', {
         autoIncrement: true,
         primaryKey: true,
     },
-    log_id: {
+    logId: {
+        field: 'log_id',
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    dist_products_id: {
+    distributorsProductId: {
+        field: 'dist_products_id',
         type: Sequelize.INTEGER,
         allowNull: false,
     },
@@ -590,6 +592,9 @@ DistributorsProducts.belongsTo(Products);
 
 DistributorsProducts.hasMany(LogsProducts);
 LogsProducts.belongsTo(DistributorsProducts);
+
+Logs.hasMany(LogsProducts);
+LogsProducts.belongsTo(Logs);
 
 Distributors.hasMany(Reps);
 Reps.belongsTo(Distributors);
