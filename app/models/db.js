@@ -61,6 +61,43 @@ const Categories = sequelize.define('categories', {
     timeStamps: false,
 });
 
+
+/* 
+ * Distributor-Organizations Join Table
+ * dist_id: id of a distributor
+ * org_id: id of an org
+ * 
+*/
+const DistOrgs = sequelize.define('dist_org', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    dist_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    org_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+}, {
+    freezeTableName: true,
+    timeStamps: false,
+});
+
+
 /*
  * Distributors Table
  * name: Business name of the distributor
@@ -625,3 +662,4 @@ module.exports.Reps = Reps;
 module.exports.Roles = Roles;
 module.exports.Subcategories = Subcategories;
 module.exports.Users = Users;
+module.exports.DistOrgs = DistOrgs;

@@ -251,6 +251,7 @@ app.delete('/api/deleteOrg/:id', (req, res) => {
 //**********************
 app.post('/api/createDist', (req, res) => {
     const {
+        id,
         name,
         address,
         city,
@@ -259,7 +260,10 @@ app.post('/api/createDist', (req, res) => {
         phone,
         email,
     } = req.body;
-    models.Distributors.create({
+
+    
+    const createDist = () => {
+        models.Distributors.create({
         name,
         address,
         city,
@@ -268,6 +272,47 @@ app.post('/api/createDist', (req, res) => {
         phone,
         email,
     })
+        .then((dist) => {
+            models.DistOrgs.create({
+                dist_id: dist.id,
+                org_id: id,
+            });
+        })
+        .then(() => {
+            res.status(201).send('Distributor Created');
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        });
+    }
+    
+    const addDist = () => {
+        models.DistOrgs.create({
+            dist_id: dist.id,
+            org_id: id,
+        })
+            .then(() => {
+                res.status(201).send('Distributor Created');
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send(error);
+            });
+    }
+    
+    models.Distributors.findOne({
+        where: {
+            name,
+        }
+    })
+        .then((dist) => {
+            if (dist) {
+                addDist(); // adds a distributor relation if dist already exists
+            } else {
+                createDist(); // creates a dist and adds relation if dist doesn't exist
+            }
+        })
         .then(() => {
             res.status(201).send('Distributor Created');
         })
@@ -664,13 +709,13 @@ app.post('/api/initialize', (req, res) => {
 //**********************
 // Get Master Inventory
 //**********************
-app.get('/api/getMaster/:id', (req, res) => {
+app.get('/api/getMaster/:orgId', (req, res) => {
     const {
-        id,
+        orgId,
     } = req.params;
-    models.Logs.findOne({
+    models.Logs.findAll({
         where: {
-            admin_id: id,
+            admin_id: orgId,
             type: 1,
         },
         include: [{
@@ -698,6 +743,13 @@ app.get('/api/getMaster/:id', (req, res) => {
 //*************************
 // Update Master Inventory
 //*************************
+// app.put('/api/updateMaster/:masterId', (req, res) => {
+//     const {
+//         masterId,
+//     } = req.params;
+//     model.
+
+// })
 
 
 //**********************
