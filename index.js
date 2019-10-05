@@ -118,7 +118,25 @@ app.delete('/api/deleteUser/:id', (req, res) => {
         console.error(error);
         res.status(500).send(error);
     });
+});
+
+//***********************************
+// Get ALL Users of an Organization
+//***********************************
+app.get('/api/getAllUsers/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Users.findAll({
+        where: {
+            org_id: id,
+        }
+    })
+    .then((users) => {
+        res.status(200).json(users);
+    })
 })
+
 
 //*************************************************************************************** */
 
@@ -516,9 +534,6 @@ app.get('/api/getAllDistReps/:id', (req, res) => {
         where: {
             dist_id: id,
         },
-        include: [{
-            model: models.Products,
-        }]
     })
         .then((result) => {
             console.log(result);
@@ -545,12 +560,6 @@ app.post('/api/initialize', (req, res) => {
         weeklySet, //an array with inventory objects for current inventory level
     } = req.body;
 
-    const sendBackInfo = {
-        pars: [],
-        stock: [],
-    }
-    let currentLog = null;
-
     const makeMaster = () => { 
         return models.Logs.create({
             admin_id,
@@ -572,7 +581,7 @@ app.post('/api/initialize', (req, res) => {
         });
     })
     .then((result) => {
-        res.status(201).send('Master Initialized');
+        res.send('Master Initialized');
     })
     .catch((error) => {
         console.error(error);
@@ -613,11 +622,16 @@ app.post('/api/initialize', (req, res) => {
     Promise.all([makeMaster(), makeWeekly()])
     .then((values) => {
         console.log(values);
-    })
-    // makeMaster();
-    // makeWeekly();
-})
+    });
+});
 
+//**********************
+// Get Current Inventory
+//**********************
+
+//**********************
+// Get All Inventories
+//**********************
 
 //*************************************************************************************** */
 
