@@ -24,7 +24,7 @@ app.use(session({
 
 // Variable that syncs up our two repo paths
 console.log(__dirname);
-const pathway = path.join(__dirname, '../miseenplace/src/index.html');
+const pathway = path.join(__dirname, '../mise-en-place/dist/MiseEnPlace');
 
 // serve static files
 app.use(express.static(pathway));
