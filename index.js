@@ -496,7 +496,7 @@ app.put('/api/updateRep/:id', (req, res) => {
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).send(error);
+            res.status(201).send(error);
         })
 })
 
@@ -519,7 +519,7 @@ app.delete('/api/deleteRep/:id', (req, res) => {
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).send(error);
+            res.status(201).send(error);
         });
 });
 
@@ -537,7 +537,7 @@ app.get('/api/getAllDistReps/:id', (req, res) => {
     })
         .then((result) => {
             console.log(result);
-            res.json(result);
+            res.status(200).json(result);
         })
         .catch((error) => {
             console.error(error);
