@@ -251,7 +251,7 @@ app.delete('/api/deleteOrg/:id', (req, res) => {
 //**********************
 app.post('/api/createDist', (req, res) => {
     const {
-        id,
+        orgId,
         name,
         address,
         city,
@@ -260,8 +260,7 @@ app.post('/api/createDist', (req, res) => {
         phone,
         email,
     } = req.body;
-
-    
+    //distributor doesn't already exist
     const createDist = () => {
         models.Distributors.create({
         name,
@@ -275,32 +274,31 @@ app.post('/api/createDist', (req, res) => {
         .then((dist) => {
             models.DistOrgs.create({
                 dist_id: dist.id,
-                org_id: id,
+                org_id: orgId,
             });
         })
         .then(() => {
-            res.status(201).send('Distributor Created');
+            console.log('Successfully CREATED!');
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).send(error);
         });
     }
-    
-    const addDist = () => {
+    //distributor already exists
+    const addDist = (dist) => {
+        console.log(dist);
         models.DistOrgs.create({
-            dist_id: dist.id,
-            org_id: id,
+            dist_id: dist.organizationId,
+            org_id: orgId,
         })
             .then(() => {
-                res.status(201).send('Distributor Created');
+                console.log('Successfully ADDED!');
             })
             .catch((error) => {
                 console.error(error);
-                res.status(500).send(error);
             });
     }
-    
+    // this is what runs when the api is called upon
     models.Distributors.findOne({
         where: {
             name,
@@ -308,7 +306,7 @@ app.post('/api/createDist', (req, res) => {
     })
         .then((dist) => {
             if (dist) {
-                addDist(); // adds a distributor relation if dist already exists
+                addDist(dist); // adds a distributor relation if dist already exists
             } else {
                 createDist(); // creates a dist and adds relation if dist doesn't exist
             }
@@ -388,10 +386,29 @@ app.delete('/api/deleteDist/:id', (req, res) => {
 //**********************
 // Get A Distributor
 //**********************
+app.get('/api/getDist/:distId', (req, res) => {
+    const {
+        distId,
+    } = req.params;
+    models.Distributors.findOne({
+        where: {
+            id: distId,
+        },
+        include: [{
+            model: models.Reps,
+        }]
+    })
+    .then((dist) => {
+        res.status(200).json(dist);
+    })
+})
 
 //**********************
 // Get All Distributors
 //**********************
+app.get('/api/getAllDistributors/:orgId', (req, res) => {
+
+})
 
 //*************************************************************************************** */
 

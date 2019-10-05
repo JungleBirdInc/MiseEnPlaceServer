@@ -106,7 +106,8 @@ const DistOrgs = sequelize.define('dist_org', {
  * zip: 5 digit American postal code
  */
 const Distributors = sequelize.define('distributors', {
-    id: {
+    organizationId: {
+        field: 'id',
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
@@ -486,7 +487,8 @@ const Products = sequelize.define('products', {
  * dist_id: the id of the distributor associated with this rep
  */
 const Reps = sequelize.define('reps', {
-    id: {
+    distributorOrganizationId: {
+        field: 'id',
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
