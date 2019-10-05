@@ -710,12 +710,12 @@ app.post('/api/initialize', (req, res) => {
     });
     };
 
-    const makeWeekly = () => {
-        let payments = weeklySet.map((weeklyItem) => weeklyItem.price * weeklyItem.qty);
+    const makeCurrent = () => {
+        let payments = weeklySet.map((currentItem) => currentItem.price * currentItem.qty);
         let totalPayment = payments.reduce((a, b) => a + b, 0)
         return models.Logs.create({
             admin_id,
-            type: 2,
+            type: 5,
             dist_id,
             rep_id,
             total_price: totalPayment,
@@ -725,11 +725,11 @@ app.post('/api/initialize', (req, res) => {
         }
         )
             .then((log) => {
-                return weeklySet.forEach((weeklyItem) => {
+                return weeklySet.forEach((currentItem) => {
                     models.LogsProducts.create({
                         log_id: log.id,
-                        dist_products_id: weeklyItem.id,
-                        qty: weeklyItem.qty,
+                        dist_products_id: currentItem.id,
+                        qty: currentItem.qty,
                     });
                 });
             })
@@ -741,7 +741,7 @@ app.post('/api/initialize', (req, res) => {
             });
     };
 
-    Promise.all([makeMaster(), makeWeekly()])
+    Promise.all([makeMaster(), makeCurrent()])
     .then((values) => {
         console.log(values);
     });
@@ -797,6 +797,33 @@ app.get('/api/getMaster/:orgId', (req, res) => {
 //**********************
 // Get Current Inventory
 //**********************
+app.get('/api/getCurrent/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 5,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((master) => {
+            res.status(200).json(master);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**************************
 // Update Current Inventory
