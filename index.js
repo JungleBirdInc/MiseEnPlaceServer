@@ -19,6 +19,7 @@ app.use(session({
     secret: 'secret',
     resave: true,
     saveUninitialized: true,
+    
 }));
 // date: models.sequelize.literal('CURRENT_TIMESTAMP'),
 
