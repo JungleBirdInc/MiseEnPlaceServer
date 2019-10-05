@@ -118,7 +118,25 @@ app.delete('/api/deleteUser/:id', (req, res) => {
         console.error(error);
         res.status(500).send(error);
     });
+});
+
+//***********************************
+// Get ALL Users of an Organization
+//***********************************
+app.get('/api/getAllUsers/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Users.findAll({
+        where: {
+            org_id: id,
+        }
+    })
+    .then((users) => {
+        res.status(200).json(users);
+    })
 })
+
 
 //*************************************************************************************** */
 
@@ -369,6 +387,56 @@ app.post('/api/createProduct', (req, res) => {
         });
 });
 
+//***************************
+// Get a DistributorProduct
+//***************************
+app.get('/api/getDistProd/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.DistributorsProducts.findOne({
+        where: {
+            id,
+        },
+        include: [{
+            model: models.Products,
+        }]
+    })
+        .then((result) => {
+            console.log(result);
+            res.json(result);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+
+//******************************
+// Get ALL DistributorProducts
+//******************************
+app.get('/api/getAllDistProd/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.DistributorsProducts.findAll({
+        where: {
+            dist_id: id,
+        },
+        include: [{
+            model: models.Products,
+        }]
+    })
+        .then((result) => {
+            console.log(result);
+            res.json(result);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+
+
+
 //*************************************************************************************** */
 
 //**********************
@@ -428,7 +496,7 @@ app.put('/api/updateRep/:id', (req, res) => {
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).send(error);
+            res.status(201).send(error);
         })
 })
 
@@ -451,11 +519,189 @@ app.delete('/api/deleteRep/:id', (req, res) => {
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).send(error);
+            res.status(201).send(error);
+        });
+});
+
+//******************************
+// Get ALL Distributor Reps
+//******************************
+app.get('/api/getAllDistReps/:id', (req, res) => {
+    const {
+        id,
+    } = req.params;
+    models.Reps.findAll({
+        where: {
+            dist_id: id,
+        },
+    })
+        .then((result) => {
+            console.log(result);
+            res.status(200).json(result);
+        })
+        .catch((error) => {
+            console.error(error);
         });
 });
 
 //*************************************************************************************** */
+
+//**********************
+// Initialize Inventory
+//**********************
+app.post('/api/initialize', (req, res) => {
+    const {
+        admin_id,
+        type,
+        dist_id,
+        rep_id,
+        total_price,
+        masterSet, //an array with inventory objects for par list
+        weeklySet, //an array with inventory objects for current inventory level
+    } = req.body;
+
+    const makeMaster = () => { 
+        return models.Logs.create({
+            admin_id,
+            type: 1,
+            dist_id,
+            rep_id,
+        }, {
+        returning: true,
+        plain: true,
+        }
+    )
+    .then((log) => {
+        return masterSet.forEach((masterItem) => {
+            models.LogsProducts.create({
+                log_id: log.id,
+                dist_products_id: masterItem.id,
+                qty: masterItem.qty,
+            });
+        });
+    })
+    .then((result) => {
+        res.send('Master Initialized');
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+    };
+
+    const makeWeekly = () => {
+        let payments = weeklySet.map((weeklyItem) => weeklyItem.price * weeklyItem.qty);
+        let totalPayment = payments.reduce((a, b) => a + b, 0)
+        return models.Logs.create({
+            admin_id,
+            type: 2,
+            dist_id,
+            rep_id,
+            total_price: totalPayment,
+        }, {
+            returning: true,
+            plain: true,
+        }
+        )
+            .then((log) => {
+                return weeklySet.forEach((weeklyItem) => {
+                    models.LogsProducts.create({
+                        log_id: log.id,
+                        dist_products_id: weeklyItem.id,
+                        qty: weeklyItem.qty,
+                    });
+                });
+            })
+            .then((result) => {
+                res.status(201).send('Weekly Initialized');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    Promise.all([makeMaster(), makeWeekly()])
+    .then((values) => {
+        console.log(values);
+    });
+});
+
+//**********************
+// Get Current Inventory
+//**********************
+
+//**************************
+// Update Current Inventory
+//**************************
+
+//**********************
+// Get Any Inventory
+//**********************
+
+//**********************
+// Get All Inventories
+//**********************
+
+//*************************************************************************************** */
+
+//**********************
+// Place an Order
+//**********************
+
+//**********************
+// Get Any Order
+//**********************
+
+//**********************
+// Get All Orders
+//**********************
+
+//**********************
+// Delete an Order
+//**********************
+
+//*************************************************************************************** */
+
+//**********************
+// Post an invoice
+//**********************
+
+//**********************
+// Get Any Invoice
+//**********************
+
+//**********************
+// Get All Invoices
+//**********************
+
+//**********************
+// Delete An Invoice
+//**********************
+
+//*************************************************************************************** */
+
+//**********************
+// Add Open Bottle
+//**********************
+
+//**********************
+// Update Open Bottle
+//**********************
+
+//**********************
+// Get All Open Bottles
+//**********************
+
+
+//*************************************************************************************** */
+
+//**********************
+// Forecasting
+//**********************
+
+//*************************************************************************************** */
+
+
+
 
 
 
