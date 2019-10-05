@@ -52,10 +52,11 @@ app.post('/api/createUser', (req, res) => {
         password,
     })
         .then(() => {
-            res.send(201);
+            res.status(201).send('User Created');
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -135,6 +136,10 @@ app.get('/api/getAllUsers/:id', (req, res) => {
     .then((users) => {
         res.status(200).json(users);
     })
+    .catch((error) => {
+        console.log(error);
+        res.status(500).send(error);
+    })
 })
 
 
@@ -166,10 +171,11 @@ app.post('/api/createOrg', (req, res) => {
         email,
     })
         .then(() => {
-            res.send(201);
+            res.status(201).send('Organization Created');
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -663,8 +669,17 @@ app.get('/api/getMaster/:id', (req, res) => {
             master_inventory: 1,
         },
         include: [{
+            model: models.DistributorsProducts,
+        },{
             model: models.Products,
         }]
+        })
+        .then((master) => {
+            res.status(200).json(master);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
         })
     })
 
