@@ -785,13 +785,70 @@ app.get('/api/getMaster/:orgId', (req, res) => {
 //*************************
 // Update Master Inventory
 //*************************
-// app.put('/api/updateMaster/:masterId', (req, res) => {
-//     const {
-//         masterId,
-//     } = req.params;
-//     model.
-
-// })
+app.put('/api/updateMaster/:masterId', (req, res) => {
+    const {
+        masterId,
+    } = req.params;
+    const {
+        masterSet,
+    } = req.body;
+    masterSet.forEach((masterItem) => {
+        return models.LogsProducts.findOne({
+            where: {
+                id: masterItem.id,
+            }
+        })
+        .then((found) => {
+            if (!found) {
+                return models.LogsProducts.create({
+                    log_id: masterId,
+                    dist_products_id: masterItem.id,
+                    qty: masterItem.qty,
+                })
+                .then((created) => {
+                    return {
+                        status: "CREATED",
+                        item: created,
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).send(error);
+                })
+            } else {
+                console.log(masterItem.id);
+                return models.LogsProducts.update({
+                    qty: masterItem.qty,
+                }, {
+                    where: {
+                        id: masterItem.id,
+                    }
+                })
+                .then((updated) => {
+                    models.DistributorsProducts.update({
+                        price: masterItem.distributors_product.price,
+                    }, {
+                        where: {
+                            id: masterItem.distributors_product.id,
+                        }
+                    });
+                    return updated;
+                })
+                .then((updated) => {
+                    return {
+                        status: "UPDATED",
+                        item: updated,
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).send(error);
+                })
+            }
+        })
+    });
+    res.status(201).send('Updated Master');
+});
 
 
 //**********************
