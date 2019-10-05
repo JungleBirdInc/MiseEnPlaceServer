@@ -134,11 +134,12 @@ const DistributorsProducts = sequelize.define('distributors_products', {
     },
     dist_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
-    products_id: {
+    productId: {
+        field: 'product_id',
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     price: {
         type: Sequelize.INTEGER,
@@ -201,11 +202,11 @@ const Logs = sequelize.define('logs', {
     },
     admin_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     type: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     dist_id: {
         type: Sequelize.INTEGER,
@@ -215,14 +216,20 @@ const Logs = sequelize.define('logs', {
         type: Sequelize.INTEGER,
         allowNull: true,
     },
-    date: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-    },
     total_price: {
         type: Sequelize.INTEGER,
         allowNull: true,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: true,
@@ -254,7 +261,17 @@ const LogsProducts = sequelize.define('logs_products', {
     qty: {
         type: Sequelize.INTEGER,
         allowNull: true,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: true,
@@ -285,7 +302,17 @@ const OpenBottles = sequelize.define('open_bottles', {
     weight: {
         type: Sequelize.INTEGER,
         allowNull: false,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: true,
@@ -556,6 +583,21 @@ const Users = sequelize.define('users', {
     freezeTableName: true,
     timeStamps: false,
 });
+
+// Relationships
+Products.hasMany(DistributorsProducts);
+DistributorsProducts.belongsTo(Products);
+
+DistributorsProducts.hasMany(LogsProducts);
+LogsProducts.belongsTo(DistributorsProducts);
+
+Distributors.hasMany(Reps);
+Reps.belongsTo(Distributors);
+
+Organizations.hasMany(Distributors);
+Distributors.hasMany(Organizations);
+
+
 
 
 
