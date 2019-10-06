@@ -663,7 +663,7 @@ app.post('/api/initialize', (req, res) => {
         rep_id,
         total_price,
         masterSet, //an array with inventory objects for par list
-        weeklySet, //an array with inventory objects for current inventory level
+        currentSet, //an array with inventory objects for current inventory level
     } = req.body;
 
     // let master = 0;
@@ -711,7 +711,7 @@ app.post('/api/initialize', (req, res) => {
     };
 
     const makeCurrent = () => {
-        let payments = weeklySet.map((currentItem) => currentItem.price * currentItem.qty);
+        let payments = currentSet.map((currentItem) => currentItem.price * currentItem.qty);
         let totalPayment = payments.reduce((a, b) => a + b, 0)
         return models.Logs.create({
             admin_id,
@@ -725,7 +725,7 @@ app.post('/api/initialize', (req, res) => {
         }
         )
             .then((log) => {
-                weeklySet.forEach((currentItem) => {
+                currentSet.forEach((currentItem) => {
                     models.LogsProducts.create({
                         log_id: log.id,
                         dist_products_id: currentItem.id,
@@ -920,6 +920,7 @@ app.get('/api/getAllInvents/:orgId', (req, res) => {
     models.Logs.findAll({
         where: {
             admin_id: orgId,
+            type: 1 || 5 || 2, //this will pull your master, current, and weekly logs
         },
         include: [{
             model: models.LogsProducts,
@@ -940,23 +941,78 @@ app.get('/api/getAllInvents/:orgId', (req, res) => {
         })
 })
 
+//**********************
+// Make a Weekly Log
+//**********************
+app.post('api/makeWeekly', (req, res) => {
+const {
+admin_id,
+    type,
+    dist_id,
+    rep_id,
+    total_price,
+    weeklySet, //an array with inventory objects for current inventory level
+    } = req.body;
+
+    return models.Logs.create({
+        admin_id,
+        type: 2,
+        dist_id,
+        rep_id,
+    }, {
+        returning: true,
+        plain: true,
+    }
+    )
+        .then((log) => {
+            weeklySet.forEach((weeklyItem) => {
+                models.LogsProducts.create({
+                    log_id: log.id,
+                    dist_products_id: weeklyItem.id,
+                    qty: weeklyItem.qty,
+                });
+            });
+            return log.id;
+        })
+        .then((result) => {
+            res.send('Weekly Logged');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+});
+
+
 //*************************************************************************************** */
 
 //**********************
 // Place an Order
 //**********************
+app.post('/api/placeOrder', (req, res) => {
+
+});
 
 //**********************
 // Get Any Order
 //**********************
+app.get('/api/getOrder/:orderId', (req, res) => {
+
+});
 
 //**********************
 // Get All Orders
 //**********************
+app.get('/api/getAllOrders/:orgId', (req, res) => {
+
+});
 
 //**********************
 // Delete an Order
 //**********************
+app.delete('api/deleteOrder/:id', (req, res) => {
+
+});
 
 //*************************************************************************************** */
 
