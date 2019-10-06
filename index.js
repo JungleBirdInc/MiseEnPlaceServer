@@ -989,7 +989,43 @@ admin_id,
 //**********************
 // Place an Order
 //**********************
-app.post('/api/placeOrder', (req, res) => {
+app.post('api/placeOrder', (req, res) => {
+    const {
+        admin_id,
+        type,
+        dist_id,
+        rep_id,
+        total_price,
+        weeklySet, //an array with inventory objects for current inventory level
+    } = req.body;
+
+    return models.Logs.create({
+        admin_id,
+        type: 3,
+        dist_id,
+        rep_id,
+        total_price,
+    }, {
+        returning: true,
+        plain: true,
+    }
+    )
+        .then((log) => {
+            weeklySet.forEach((weeklyItem) => {
+                models.LogsProducts.create({
+                    log_id: log.id,
+                    dist_products_id: weeklyItem.id,
+                    qty: weeklyItem.qty,
+                });
+            });
+            return log.id;
+        })
+        .then((result) => {
+            res.send('Weekly Logged');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 
 });
 
