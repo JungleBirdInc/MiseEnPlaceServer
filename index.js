@@ -710,12 +710,12 @@ app.post('/api/initialize', (req, res) => {
     });
     };
 
-    const makeWeekly = () => {
-        let payments = weeklySet.map((weeklyItem) => weeklyItem.price * weeklyItem.qty);
+    const makeCurrent = () => {
+        let payments = weeklySet.map((currentItem) => currentItem.price * currentItem.qty);
         let totalPayment = payments.reduce((a, b) => a + b, 0)
         return models.Logs.create({
             admin_id,
-            type: 2,
+            type: 5,
             dist_id,
             rep_id,
             total_price: totalPayment,
@@ -725,13 +725,23 @@ app.post('/api/initialize', (req, res) => {
         }
         )
             .then((log) => {
-                return weeklySet.forEach((weeklyItem) => {
+                weeklySet.forEach((currentItem) => {
                     models.LogsProducts.create({
                         log_id: log.id,
-                        dist_products_id: weeklyItem.id,
-                        qty: weeklyItem.qty,
+                        dist_products_id: currentItem.id,
+                        qty: currentItem.qty,
                     });
                 });
+                return log.id;
+            })
+            .then((current) => {
+                models.Organizations.update({
+                    current_inventory: current,
+                }, {
+                    where: {
+                        id: admin_id,
+                    }
+                })
             })
             .then((result) => {
                 res.status(201).send('Weekly Initialized');
@@ -741,7 +751,7 @@ app.post('/api/initialize', (req, res) => {
             });
     };
 
-    Promise.all([makeMaster(), makeWeekly()])
+    Promise.all([makeMaster(), makeCurrent()])
     .then((values) => {
         console.log(values);
     });
@@ -785,30 +795,150 @@ app.get('/api/getMaster/:orgId', (req, res) => {
 //*************************
 // Update Master Inventory
 //*************************
-// app.put('/api/updateMaster/:masterId', (req, res) => {
-//     const {
-//         masterId,
-//     } = req.params;
-//     model.
-
-// })
+app.put('/api/updateMaster/:masterId', (req, res) => {
+    const {
+        masterId,
+    } = req.params;
+    const {
+        masterSet,
+    } = req.body;
+    masterSet.forEach((masterItem) => {
+        return models.LogsProducts.upsert({
+            id: masterItem.id,
+            logId: masterId,
+            distributorsProductId: masterItem.distributorsProductId,
+            qty: masterItem.qty,
+        })
+        .then((upserted) => {
+            console.log(upserted);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        })
+    });
+    res.status(201).send('Updated Master');
+});
 
 
 //**********************
 // Get Current Inventory
 //**********************
+app.get('/api/getCurrent/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 5,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((master) => {
+            res.status(200).json(master);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**************************
 // Update Current Inventory
 //**************************
+app.put('/api/updateCurrent/:currentId', (req, res) => {
+    const {
+        currentId,
+    } = req.params;
+    const {
+        currentSet,
+    } = req.body;
+    currentSet.forEach((currentItem) => {
+        return models.LogsProducts.upsert({
+            id: currentItem.id,
+            logId: currentId,
+            distributorsProductId: masterItem.distributorsProductId,
+            qty: currentItem.qty,
+        })
+            .then((upserted) => {
+                console.log(upserted);
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send(error);
+            })
+    });
+    res.status(201).send('Updated Current Inventory');
+});
 
 //**********************
 // Get Any Inventory
 //**********************
+app.get('/api/getInvent/:invId', (req, res) => {
+    const {
+        invId,
+    } = req.params;
+    models.Logs.findOne({
+        where: {
+            id: invId,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventory) => {
+            res.status(200).json(inventory);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**********************
 // Get All Inventories
 //**********************
+app.get('/api/getAllInvents/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventories) => {
+            res.status(200).json(inventories);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //*************************************************************************************** */
 
