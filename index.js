@@ -1134,7 +1134,7 @@ app.get('/api/getAllInvoices/:orgId', (req, res) => {
     models.Logs.findAll({
         where: {
             admin_id: orgId,
-            type: 4, //this will pull only your orders
+            type: 4, //this will pull only your invoices
         },
         include: [{
             model: models.LogsProducts,
@@ -1183,14 +1183,30 @@ app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
 //**********************
 // Add Open Bottle
 //**********************
+app.post('/api/newBottle', (req, res) => {
+
+})
 
 //**********************
 // Update Open Bottle
 //**********************
+app.put('/api/updateWeight', (req, res) => {
+
+})
 
 //**********************
 // Get All Open Bottles
 //**********************
+app.get('/api/getAllBottles', (req, res) => {
+
+})
+
+//**********************
+// Delete a Bottle
+//**********************
+app.delete('/api/deleteBottle', (req, res) => {
+    
+})
 
 
 //*************************************************************************************** */
