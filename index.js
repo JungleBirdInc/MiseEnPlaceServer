@@ -1184,28 +1184,78 @@ app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
 // Add Open Bottle
 //**********************
 app.post('/api/newBottle', (req, res) => {
-
+    const {
+        org_id,
+        product_id,
+        weight,
+    } = req.body;
+    return models.OpenBottles.create({
+        org_id,
+        product_id,
+        weight,
+    })
+    .then((bottle) => {
+        res.status(201).json(bottle);
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send(error)
+    });
 })
 
 //**********************
 // Update Open Bottle
 //**********************
-app.put('/api/updateWeight', (req, res) => {
-
+app.put('/api/updateWeight/:bottleId', (req, res) => {
+    const {
+        bottleId,
+    } = req.params;
+    const {
+        weight,
+    } = req.body;
+    return models.OpenBottles.update({
+        weight,
+    }, {
+        where: {
+            id: bottleId,
+        }
+    })
+    .then((updated) => {
+        res.status(201).send('Bottle Weight Updated!')
+    })
 })
 
 //**********************
 // Get All Open Bottles
 //**********************
-app.get('/api/getAllBottles', (req, res) => {
-
+app.get('/api/getAllBottles/:orgId', (req, res) => {
+    const {
+        orgId
+    } = req.params;
+    return models.OpenBottles.findAll({
+        where: {
+            org_id: orgId,
+        },
+        include: [{
+            model: models.DistributorsProducts,
+            include: [{
+                model: models.Products,
+            }]
+        }]
+    })
+    .then((openBottles) => {
+        res.status(200).json(openBottles);
+    })
+    .catch((error) => {
+        res.status(500).send(error);
+    })
 })
 
 //**********************
 // Delete a Bottle
 //**********************
 app.delete('/api/deleteBottle', (req, res) => {
-    
+
 })
 
 
