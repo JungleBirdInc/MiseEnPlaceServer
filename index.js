@@ -883,11 +883,11 @@ app.put('/api/updateCurrent/:currentId', (req, res) => {
 //**********************
 // Get Any Inventory
 //**********************
-app.get('/api/getInventory/:invId', (req, res) => {
+app.get('/api/getInvent/:invId', (req, res) => {
     const {
         invId,
     } = req.params;
-    models.Logs.findAll({
+    models.Logs.findOne({
         where: {
             id: invId,
         },
@@ -913,6 +913,32 @@ app.get('/api/getInventory/:invId', (req, res) => {
 //**********************
 // Get All Inventories
 //**********************
+app.get('/api/getAllInvents/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventories) => {
+            res.status(200).json(inventories);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //*************************************************************************************** */
 
