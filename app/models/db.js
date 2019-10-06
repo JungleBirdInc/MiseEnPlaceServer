@@ -336,6 +336,7 @@ const LogsProducts = sequelize.define('logs_products', {
  * product_id: refers to the DistributorsProducts table
  * weight: the weight of the bottle recorded as an integer. ALL WEIGHTS MUST BE CONSISTENT.
  */
+
 const OpenBottles = sequelize.define('open_bottles', {
     id: {
         type: Sequelize.INTEGER,
@@ -343,6 +344,11 @@ const OpenBottles = sequelize.define('open_bottles', {
         primaryKey: true,
     },
     org_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    distributorsProductId: {
+        field: "product_id",
         type: Sequelize.INTEGER,
         allowNull: false,
     },
@@ -653,6 +659,9 @@ DistOrgs.belongsTo(Distributors);
 DistOrgs.belongsTo(Organizations);
 Distributors.hasMany(DistOrgs);
 Organizations.hasMany(DistOrgs);
+
+DistributorsProducts.hasMany(OpenBottles);
+OpenBottles.belongsTo(DistributorsProducts);
 
 
 
