@@ -663,7 +663,7 @@ app.post('/api/initialize', (req, res) => {
         rep_id,
         total_price,
         masterSet, //an array with inventory objects for par list
-        weeklySet, //an array with inventory objects for current inventory level
+        currentSet, //an array with inventory objects for current inventory level
     } = req.body;
 
     // let master = 0;
@@ -710,12 +710,12 @@ app.post('/api/initialize', (req, res) => {
     });
     };
 
-    const makeWeekly = () => {
-        let payments = weeklySet.map((weeklyItem) => weeklyItem.price * weeklyItem.qty);
+    const makeCurrent = () => {
+        let payments = currentSet.map((currentItem) => currentItem.price * currentItem.qty);
         let totalPayment = payments.reduce((a, b) => a + b, 0)
         return models.Logs.create({
             admin_id,
-            type: 2,
+            type: 5,
             dist_id,
             rep_id,
             total_price: totalPayment,
@@ -725,13 +725,23 @@ app.post('/api/initialize', (req, res) => {
         }
         )
             .then((log) => {
-                return weeklySet.forEach((weeklyItem) => {
+                currentSet.forEach((currentItem) => {
                     models.LogsProducts.create({
                         log_id: log.id,
-                        dist_products_id: weeklyItem.id,
-                        qty: weeklyItem.qty,
+                        dist_products_id: currentItem.id,
+                        qty: currentItem.qty,
                     });
                 });
+                return log.id;
+            })
+            .then((current) => {
+                models.Organizations.update({
+                    current_inventory: current,
+                }, {
+                    where: {
+                        id: admin_id,
+                    }
+                })
             })
             .then((result) => {
                 res.status(201).send('Weekly Initialized');
@@ -741,7 +751,7 @@ app.post('/api/initialize', (req, res) => {
             });
     };
 
-    Promise.all([makeMaster(), makeWeekly()])
+    Promise.all([makeMaster(), makeCurrent()])
     .then((values) => {
         console.log(values);
     });
@@ -785,54 +795,328 @@ app.get('/api/getMaster/:orgId', (req, res) => {
 //*************************
 // Update Master Inventory
 //*************************
-// app.put('/api/updateMaster/:masterId', (req, res) => {
-//     const {
-//         masterId,
-//     } = req.params;
-//     model.
-
-// })
+app.put('/api/updateMaster/:masterId', (req, res) => {
+    const {
+        masterId,
+    } = req.params;
+    const {
+        masterSet,
+    } = req.body;
+    masterSet.forEach((masterItem) => {
+        return models.LogsProducts.upsert({
+            id: masterItem.id,
+            logId: masterId,
+            distributorsProductId: masterItem.distributorsProductId,
+            qty: masterItem.qty,
+        })
+        .then((upserted) => {
+            console.log(upserted);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        })
+    });
+    res.status(201).send('Updated Master');
+});
 
 
 //**********************
 // Get Current Inventory
 //**********************
+app.get('/api/getCurrent/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 5,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((master) => {
+            res.status(200).json(master);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**************************
 // Update Current Inventory
 //**************************
+app.put('/api/updateCurrent/:currentId', (req, res) => {
+    const {
+        currentId,
+    } = req.params;
+    const {
+        currentSet,
+    } = req.body;
+    currentSet.forEach((currentItem) => {
+        return models.LogsProducts.upsert({
+            id: currentItem.id,
+            logId: currentId,
+            distributorsProductId: masterItem.distributorsProductId,
+            qty: currentItem.qty,
+        })
+            .then((upserted) => {
+                console.log(upserted);
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send(error);
+            })
+    });
+    res.status(201).send('Updated Current Inventory');
+});
 
 //**********************
 // Get Any Inventory
 //**********************
+app.get('/api/getInvent/:invId', (req, res) => {
+    const {
+        invId,
+    } = req.params;
+    models.Logs.findOne({
+        where: {
+            id: invId,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventory) => {
+            res.status(200).json(inventory);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**********************
 // Get All Inventories
 //**********************
+app.get('/api/getAllInvents/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 1 || 5 || 2, //this will pull your master, current, and weekly logs
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventories) => {
+            res.status(200).json(inventories);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
+
+//**********************
+// Make a Weekly Log
+//**********************
+app.post('api/makeWeekly', (req, res) => {
+const {
+admin_id,
+    type,
+    dist_id,
+    rep_id,
+    total_price,
+    weeklySet, //an array with inventory objects for current inventory level
+    } = req.body;
+
+    return models.Logs.create({
+        admin_id,
+        type: 2,
+        dist_id,
+        rep_id,
+    }, {
+        returning: true,
+        plain: true,
+    }
+    )
+        .then((log) => {
+            weeklySet.forEach((weeklyItem) => {
+                models.LogsProducts.create({
+                    log_id: log.id,
+                    dist_products_id: weeklyItem.id,
+                    qty: weeklyItem.qty,
+                });
+            });
+            return log.id;
+        })
+        .then((result) => {
+            res.send('Weekly Logged');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+});
+
 
 //*************************************************************************************** */
 
 //**********************
 // Place an Order
 //**********************
+app.post('api/placeOrder', (req, res) => {
+    const {
+        admin_id,
+        type,
+        dist_id,
+        rep_id,
+        total_price,
+        weeklySet, //an array with inventory objects for current inventory level
+    } = req.body;
+
+    return models.Logs.create({
+        admin_id,
+        type: 3,
+        dist_id,
+        rep_id,
+        total_price,
+    }, {
+        returning: true,
+        plain: true,
+    }
+    )
+        .then((log) => {
+            weeklySet.forEach((weeklyItem) => {
+                models.LogsProducts.create({
+                    log_id: log.id,
+                    dist_products_id: weeklyItem.id,
+                    qty: weeklyItem.qty,
+                });
+            });
+            return log.id;
+        })
+        .then((result) => {
+            res.send('Weekly Logged');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+});
 
 //**********************
 // Get Any Order
 //**********************
 
+// Just use the route for Get Any Inventory
+
 //**********************
 // Get All Orders
 //**********************
+app.get('/api/getAllOrders/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 3, //this will pull only your orders
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventories) => {
+            res.status(200).json(inventories);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
+
 
 //**********************
 // Delete an Order
 //**********************
+
+// I took this out. Why would the client need to delete the log of an order?
+// I can reinstall it if we want to support that kind of madness
 
 //*************************************************************************************** */
 
 //**********************
 // Post an invoice
 //**********************
+// app.post('api/recordInvoice', (req, res) => {
+//     const {
+//         admin_id,
+//         type,
+//         dist_id,
+//         rep_id,
+//         total_price,
+//         receiptSet, //an array with inventory objects for current inventory level
+//     } = req.body;
+
+//     return models.Logs.create({
+//         admin_id,
+//         type: 3,
+//         dist_id,
+//         rep_id,
+//         total_price,
+//     }, {
+//         returning: true,
+//         plain: true,
+//     }
+//     )
+//         .then((log) => {
+//             receiptSet.forEach((receiptItem) => {
+//                 models.LogsProducts.create({
+//                     log_id: log.id,
+//                     dist_products_id: receiptItem.id,
+//                     qty: receiptItem.qty,
+//                 });
+//             });
+//             return log.id;
+//         })
+//         .then((result) => {
+//             res.send('Invoice Logged');
+//         })
+//         .catch((error) => {
+//             console.error(error);
+//         });
+// });
 
 //**********************
 // Get Any Invoice
