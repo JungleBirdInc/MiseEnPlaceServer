@@ -725,13 +725,23 @@ app.post('/api/initialize', (req, res) => {
         }
         )
             .then((log) => {
-                return weeklySet.forEach((currentItem) => {
+                weeklySet.forEach((currentItem) => {
                     models.LogsProducts.create({
                         log_id: log.id,
                         dist_products_id: currentItem.id,
                         qty: currentItem.qty,
                     });
                 });
+                return log.id;
+            })
+            .then((current) => {
+                models.Organizations.update({
+                    current_inventory: current,
+                }, {
+                    where: {
+                        id: admin_id,
+                    }
+                })
             })
             .then((result) => {
                 res.status(201).send('Weekly Initialized');
@@ -793,58 +803,18 @@ app.put('/api/updateMaster/:masterId', (req, res) => {
         masterSet,
     } = req.body;
     masterSet.forEach((masterItem) => {
-        return models.LogsProducts.findOne({
-            where: {
-                id: masterItem.id,
-            }
+        return models.LogsProducts.upsert({
+            id: masterItem.id,
+            logId: masterId,
+            distributorsProductId: masterItem.distributorsProductId,
+            qty: masterItem.qty,
         })
-        .then((found) => {
-            if (!found) {
-                return models.LogsProducts.create({
-                    log_id: masterId,
-                    dist_products_id: masterItem.id,
-                    qty: masterItem.qty,
-                })
-                .then((created) => {
-                    return {
-                        status: "CREATED",
-                        item: created,
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                    res.status(500).send(error);
-                })
-            } else {
-                console.log(masterItem.id);
-                return models.LogsProducts.update({
-                    qty: masterItem.qty,
-                }, {
-                    where: {
-                        id: masterItem.id,
-                    }
-                })
-                .then((updated) => {
-                    models.DistributorsProducts.update({
-                        price: masterItem.distributors_product.price,
-                    }, {
-                        where: {
-                            id: masterItem.distributors_product.id,
-                        }
-                    });
-                    return updated;
-                })
-                .then((updated) => {
-                    return {
-                        status: "UPDATED",
-                        item: updated,
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                    res.status(500).send(error);
-                })
-            }
+        .then((upserted) => {
+            console.log(upserted);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
         })
     });
     res.status(201).send('Updated Master');
@@ -885,10 +855,60 @@ app.get('/api/getCurrent/:orgId', (req, res) => {
 //**************************
 // Update Current Inventory
 //**************************
+app.put('/api/updateCurrent/:currentId', (req, res) => {
+    const {
+        currentId,
+    } = req.params;
+    const {
+        currentSet,
+    } = req.body;
+    currentSet.forEach((currentItem) => {
+        return models.LogsProducts.upsert({
+            id: currentItem.id,
+            logId: currentId,
+            distributorsProductId: masterItem.distributorsProductId,
+            qty: currentItem.qty,
+        })
+            .then((upserted) => {
+                console.log(upserted);
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send(error);
+            })
+    });
+    res.status(201).send('Updated Current Inventory');
+});
 
 //**********************
 // Get Any Inventory
 //**********************
+app.get('/api/getInventory/:invId', (req, res) => {
+    const {
+        invId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            id: invId,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventory) => {
+            res.status(200).json(inventory);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**********************
 // Get All Inventories
