@@ -1223,6 +1223,10 @@ app.put('/api/updateWeight/:bottleId', (req, res) => {
     .then((updated) => {
         res.status(201).send('Bottle Weight Updated!')
     })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send(error);
+    })
 })
 
 //**********************
@@ -1247,6 +1251,7 @@ app.get('/api/getAllBottles/:orgId', (req, res) => {
         res.status(200).json(openBottles);
     })
     .catch((error) => {
+        console.error(error);
         res.status(500).send(error);
     })
 })
@@ -1254,9 +1259,26 @@ app.get('/api/getAllBottles/:orgId', (req, res) => {
 //**********************
 // Delete a Bottle
 //**********************
-app.delete('/api/deleteBottle', (req, res) => {
+    app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
+        const {
+            bottleId,
+        } = req.params;
+        models.OpenBottles.destroy({
+            where: {
+                id: bottleId,
+            },
+        })
+            .then(() => {
+                res.send({
+                    deleted: true
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send(error);
+            });
+    });
 
-})
 
 
 //*************************************************************************************** */
