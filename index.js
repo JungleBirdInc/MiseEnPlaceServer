@@ -996,7 +996,7 @@ app.post('api/placeOrder', (req, res) => {
         dist_id,
         rep_id,
         total_price,
-        weeklySet, //an array with inventory objects for current inventory level
+        weeklySet, //an array with inventory objects for current order
     } = req.body;
 
     return models.Logs.create({
@@ -1079,70 +1079,187 @@ app.get('/api/getAllOrders/:orgId', (req, res) => {
 //**********************
 // Post an invoice
 //**********************
-// app.post('api/recordInvoice', (req, res) => {
-//     const {
-//         admin_id,
-//         type,
-//         dist_id,
-//         rep_id,
-//         total_price,
-//         receiptSet, //an array with inventory objects for current inventory level
-//     } = req.body;
+app.post('api/recordInvoice', (req, res) => {
+    const {
+        admin_id,
+        type,
+        dist_id,
+        rep_id,
+        total_price,
+        receiptSet, //an array with inventory objects for current inventory level
+    } = req.body;
 
-//     return models.Logs.create({
-//         admin_id,
-//         type: 3,
-//         dist_id,
-//         rep_id,
-//         total_price,
-//     }, {
-//         returning: true,
-//         plain: true,
-//     }
-//     )
-//         .then((log) => {
-//             receiptSet.forEach((receiptItem) => {
-//                 models.LogsProducts.create({
-//                     log_id: log.id,
-//                     dist_products_id: receiptItem.id,
-//                     qty: receiptItem.qty,
-//                 });
-//             });
-//             return log.id;
-//         })
-//         .then((result) => {
-//             res.send('Invoice Logged');
-//         })
-//         .catch((error) => {
-//             console.error(error);
-//         });
-// });
+    return models.Logs.create({
+        admin_id,
+        type: 4,
+        dist_id,
+        rep_id,
+        total_price,
+    }, {
+        returning: true,
+        plain: true,
+    }
+    )
+        .then((log) => {
+            receiptSet.forEach((receiptItem) => {
+                models.LogsProducts.create({
+                    log_id: log.id,
+                    dist_products_id: receiptItem.id,
+                    qty: receiptItem.qty,
+                });
+            });
+            return log.id;
+        })
+        .then((result) => {
+            res.send('Invoice Logged');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
 
 //**********************
 // Get Any Invoice
 //**********************
 
+//see get any order / get any inventory
+
 //**********************
 // Get All Invoices
 //**********************
+app.get('/api/getAllInvoices/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 4, //this will pull only your invoices
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((invoices) => {
+            res.status(200).json(invoices);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**********************
 // Delete An Invoice
 //**********************
+app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
+    const {
+        receiptId,
+    } = req.params;
+    models.Reps.destroy({
+        where: {
+            id: receiptId,
+        },
+    })
+        .then(() => {
+            res.send({
+                deleted: true
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        });
+});
 
 //*************************************************************************************** */
 
 //**********************
-// Add Open Bottle
+// Add/Update Open Bottles
 //**********************
+app.put('/api/newWeights/:orgId', (req, res) => {
+    const {
+        bottleSet,
+    } = req.body;
+    const {
+        orgId,
+    } = req.params;
+    bottleSet.forEach((bottle) => {
+        return models.OpenBottles.upsert({
+            id: bottle.id,
+            org_id: orgId,
+            product_id: bottle.product_id,
+            weight: bottle.weight,
+        })
+            .then((upserted) => {
+                console.log(upserted);
+                res.end('STATUS: 201. Weight Updated!');
+            })
+            .catch((error) => {
+                console.error(error);
+                res.send('STATUS: 500.');
+                res.send(error);
+            })
+    });
+})
 
-//**********************
-// Update Open Bottle
-//**********************
 
 //**********************
 // Get All Open Bottles
 //**********************
+app.get('/api/getAllBottles/:orgId', (req, res) => {
+    const {
+        orgId
+    } = req.params;
+    return models.OpenBottles.findAll({
+        where: {
+            org_id: orgId,
+        },
+        include: [{
+            model: models.DistributorsProducts,
+            include: [{
+                model: models.Products,
+            }]
+        }]
+    })
+    .then((openBottles) => {
+        res.status(200).json(openBottles);
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send(error);
+    })
+})
+
+//**********************
+// Delete a Bottle
+//**********************
+    app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
+        const {
+            bottleId,
+        } = req.params;
+        models.OpenBottles.destroy({
+            where: {
+                id: bottleId,
+            },
+        })
+            .then(() => {
+                res.send({
+                    deleted: true
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send(error);
+            });
+    });
+
 
 
 //*************************************************************************************** */
