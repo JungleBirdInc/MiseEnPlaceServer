@@ -346,6 +346,11 @@ const OpenBottles = sequelize.define('open_bottles', {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    distributorsProductId: {
+        field: "product_id",
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
     product_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -653,6 +658,9 @@ DistOrgs.belongsTo(Distributors);
 DistOrgs.belongsTo(Organizations);
 Distributors.hasMany(DistOrgs);
 Organizations.hasMany(DistOrgs);
+
+DistributorsProducts.hasMany(OpenBottles);
+OpenBottles.belongsTo(DistributorsProducts);
 
 
 

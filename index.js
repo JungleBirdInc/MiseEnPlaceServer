@@ -1181,53 +1181,34 @@ app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
 //*************************************************************************************** */
 
 //**********************
-// Add Open Bottle
+// Add/Update Open Bottles
 //**********************
-app.post('/api/newBottle', (req, res) => {
+app.put('/api/newWeights/:orgId', (req, res) => {
     const {
-        org_id,
-        product_id,
-        weight,
+        bottleSet,
     } = req.body;
-    return models.OpenBottles.create({
-        org_id,
-        product_id,
-        weight,
-    })
-    .then((bottle) => {
-        res.status(201).json(bottle);
-    })
-    .catch((error) => {
-        console.error(error);
-        res.status(500).send(error)
+    const {
+        orgId,
+    } = req.params;
+    bottleSet.forEach((bottle) => {
+        return models.OpenBottles.upsert({
+            id: bottle.id,
+            org_id: orgId,
+            product_id: bottle.product_id,
+            weight: bottle.weight,
+        })
+            .then((upserted) => {
+                console.log(upserted);
+                res.end('STATUS: 201. Weight Updated!');
+            })
+            .catch((error) => {
+                console.error(error);
+                res.send('STATUS: 500.');
+                res.send(error);
+            })
     });
 })
 
-//**********************
-// Update Open Bottle
-//**********************
-app.put('/api/updateWeight/:bottleId', (req, res) => {
-    const {
-        bottleId,
-    } = req.params;
-    const {
-        weight,
-    } = req.body;
-    return models.OpenBottles.update({
-        weight,
-    }, {
-        where: {
-            id: bottleId,
-        }
-    })
-    .then((updated) => {
-        res.status(201).send('Bottle Weight Updated!')
-    })
-    .catch((error) => {
-        console.error(error);
-        res.status(500).send(error);
-    })
-})
 
 //**********************
 // Get All Open Bottles
