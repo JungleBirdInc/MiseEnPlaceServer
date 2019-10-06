@@ -1032,29 +1032,91 @@ app.post('api/placeOrder', (req, res) => {
 //**********************
 // Get Any Order
 //**********************
-app.get('/api/getOrder/:orderId', (req, res) => {
 
-});
+// Just use the route for Get Any Inventory
 
 //**********************
 // Get All Orders
 //**********************
 app.get('/api/getAllOrders/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 3, //this will pull only your orders
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventories) => {
+            res.status(200).json(inventories);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
-});
 
 //**********************
 // Delete an Order
 //**********************
-app.delete('api/deleteOrder/:id', (req, res) => {
 
-});
+// I took this out. Why would the client need to delete the log of an order?
+// I can reinstall it if we want to support that kind of madness
 
 //*************************************************************************************** */
 
 //**********************
 // Post an invoice
 //**********************
+// app.post('api/recordInvoice', (req, res) => {
+//     const {
+//         admin_id,
+//         type,
+//         dist_id,
+//         rep_id,
+//         total_price,
+//         receiptSet, //an array with inventory objects for current inventory level
+//     } = req.body;
+
+//     return models.Logs.create({
+//         admin_id,
+//         type: 3,
+//         dist_id,
+//         rep_id,
+//         total_price,
+//     }, {
+//         returning: true,
+//         plain: true,
+//     }
+//     )
+//         .then((log) => {
+//             receiptSet.forEach((receiptItem) => {
+//                 models.LogsProducts.create({
+//                     log_id: log.id,
+//                     dist_products_id: receiptItem.id,
+//                     qty: receiptItem.qty,
+//                 });
+//             });
+//             return log.id;
+//         })
+//         .then((result) => {
+//             res.send('Invoice Logged');
+//         })
+//         .catch((error) => {
+//             console.error(error);
+//         });
+// });
 
 //**********************
 // Get Any Invoice
