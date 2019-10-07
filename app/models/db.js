@@ -61,6 +61,49 @@ const Categories = sequelize.define('categories', {
     timeStamps: false,
 });
 
+
+/* 
+ * Distributor-Organizations Join Table
+ * dist_id: id of a distributor
+ * org_id: id of an org
+ * 
+*/
+const DistOrgs = sequelize.define('dist_org', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    distributorOrganizationId: {
+        field: 'dist_id',
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    // dist_id: {
+    //     type: Sequelize.INTEGER,
+    //     allowNull: true,
+    // },
+    organizationId: {
+        field: 'org_id',
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+}, {
+    freezeTableName: true,
+    timeStamps: false,
+});
+
+
 /*
  * Distributors Table
  * name: Business name of the distributor
@@ -69,10 +112,16 @@ const Categories = sequelize.define('categories', {
  * zip: 5 digit American postal code
  */
 const Distributors = sequelize.define('distributors', {
-    id: {
+    organizationId: {
+        field: 'id',
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+    },
+    distributorOrganizationId: {
+        field: 'id',
+        type: Sequelize.INTEGER,
+        allowNull: true,
     },
     name: {
         type: Sequelize.STRING,
@@ -250,11 +299,13 @@ const LogsProducts = sequelize.define('logs_products', {
         autoIncrement: true,
         primaryKey: true,
     },
-    log_id: {
+    logId: {
+        field: 'log_id',
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    dist_products_id: {
+    distributorsProductId: {
+        field: 'dist_products_id',
         type: Sequelize.INTEGER,
         allowNull: false,
     },
@@ -285,6 +336,7 @@ const LogsProducts = sequelize.define('logs_products', {
  * product_id: refers to the DistributorsProducts table
  * weight: the weight of the bottle recorded as an integer. ALL WEIGHTS MUST BE CONSISTENT.
  */
+
 const OpenBottles = sequelize.define('open_bottles', {
     id: {
         type: Sequelize.INTEGER,
@@ -292,6 +344,11 @@ const OpenBottles = sequelize.define('open_bottles', {
         primaryKey: true,
     },
     org_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    distributorsProductId: {
+        field: "product_id",
         type: Sequelize.INTEGER,
         allowNull: false,
     },
@@ -447,7 +504,8 @@ const Products = sequelize.define('products', {
  * dist_id: the id of the distributor associated with this rep
  */
 const Reps = sequelize.define('reps', {
-    id: {
+    distributorOrganizationId: {
+        field: 'id',
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
@@ -591,11 +649,20 @@ DistributorsProducts.belongsTo(Products);
 DistributorsProducts.hasMany(LogsProducts);
 LogsProducts.belongsTo(DistributorsProducts);
 
+Logs.hasMany(LogsProducts);
+LogsProducts.belongsTo(Logs);
+
 Distributors.hasMany(Reps);
 Reps.belongsTo(Distributors);
 
-Organizations.hasMany(Distributors);
-Distributors.hasMany(Organizations);
+DistOrgs.belongsTo(Distributors);
+DistOrgs.belongsTo(Organizations);
+Distributors.hasMany(DistOrgs);
+Organizations.hasMany(DistOrgs);
+
+DistributorsProducts.hasMany(OpenBottles);
+OpenBottles.belongsTo(DistributorsProducts);
+
 
 
 
@@ -608,6 +675,7 @@ module.exports.sequelize = sequelize;
 module.exports.Sequelize = Sequelize;
 module.exports.BtlSize = BtlSize;
 module.exports.Categories = Categories;
+module.exports.DistOrgs = DistOrgs;
 module.exports.Distributors = Distributors;
 module.exports.DistributorsProducts = DistributorsProducts;
 module.exports.LogTypes = LogTypes;

@@ -53,10 +53,11 @@ app.post('/api/createUser', (req, res) => {
         password,
     })
         .then(() => {
-            res.send(201);
+            res.status(201).send('User Created');
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -136,6 +137,10 @@ app.get('/api/getAllUsers/:id', (req, res) => {
     .then((users) => {
         res.status(200).json(users);
     })
+    .catch((error) => {
+        console.log(error);
+        res.status(500).send(error);
+    })
 })
 
 
@@ -167,10 +172,11 @@ app.post('/api/createOrg', (req, res) => {
         email,
     })
         .then(() => {
-            res.send(201);
+            res.status(201).send('Organization Created');
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -246,6 +252,7 @@ app.delete('/api/deleteOrg/:id', (req, res) => {
 //**********************
 app.post('/api/createDist', (req, res) => {
     const {
+        orgId,
         name,
         address,
         city,
@@ -254,7 +261,9 @@ app.post('/api/createDist', (req, res) => {
         phone,
         email,
     } = req.body;
-    models.Distributors.create({
+    //distributor doesn't already exist
+    const createDist = () => {
+        models.Distributors.create({
         name,
         address,
         city,
@@ -263,11 +272,52 @@ app.post('/api/createDist', (req, res) => {
         phone,
         email,
     })
+        .then((dist) => {
+            models.DistOrgs.create({
+                dist_id: dist.id,
+                org_id: orgId,
+            });
+        })
         .then(() => {
-            res.send(201);
+            console.log('Successfully CREATED!');
         })
         .catch((error) => {
             console.error(error);
+        });
+    }
+    //distributor already exists
+    const addDist = (dist) => {
+        console.log(dist);
+        models.DistOrgs.create({
+            dist_id: dist.organizationId,
+            org_id: orgId,
+        })
+            .then(() => {
+                console.log('Successfully ADDED!');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+    // this is what runs when the api is called upon
+    models.Distributors.findOne({
+        where: {
+            name,
+        }
+    })
+        .then((dist) => {
+            if (dist) {
+                addDist(dist); // adds a distributor relation if dist already exists
+            } else {
+                createDist(); // creates a dist and adds relation if dist doesn't exist
+            }
+        })
+        .then(() => {
+            res.status(201).send('Distributor Created');
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -337,10 +387,54 @@ app.delete('/api/deleteDist/:id', (req, res) => {
 //**********************
 // Get A Distributor
 //**********************
+app.get('/api/getDist/:distId', (req, res) => {
+    const {
+        distId,
+    } = req.params;
+    models.Distributors.findOne({
+        where: {
+            id: distId,
+        },
+        include: [{
+            model: models.Reps,
+        }]
+    })
+    .then((dist) => {
+        res.status(200).json(dist);
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).json(error);
+    })
+})
 
 //**********************
 // Get All Distributors
 //**********************
+app.get('/api/getAllDists/:orgId', (req, res) => {
+    const { 
+        orgId,
+    } = req.params;
+    console.log(orgId);
+    models.DistOrgs.findAll({
+        where: {
+            org_id: orgId,
+        },
+        include: [{
+            model: models.Distributors,
+            include: [{
+                model: models.Reps,
+            }]
+        }]
+    })
+        .then((dists) => {
+            res.status(200).json(dists);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json(error);
+        })
+})
 
 //*************************************************************************************** */
 
@@ -389,10 +483,11 @@ app.post('/api/createProduct', (req, res) => {
             })
         })
         .then((data) => {
-            res.send(201);
+            res.status(201).send('Product Created');
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -413,10 +508,11 @@ app.get('/api/getDistProd/:id', (req, res) => {
     })
         .then((result) => {
             console.log(result);
-            res.json(result);
+            res.status(200).json(result);
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -437,10 +533,11 @@ app.get('/api/getAllDistProd/:id', (req, res) => {
     })
         .then((result) => {
             console.log(result);
-            res.json(result);
+            res.status(200).json(result);
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -467,10 +564,11 @@ app.post('/api/createRep', (req, res) => {
         dist_id,
     })
         .then(() => {
-            res.send(201);
+            res.status(201).send('Rep Created');
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -505,7 +603,7 @@ app.put('/api/updateRep/:id', (req, res) => {
         })
         .catch((error) => {
             console.error(error);
-            res.status(201).send(error);
+            res.status(500).send(error);
         })
 })
 
@@ -528,7 +626,7 @@ app.delete('/api/deleteRep/:id', (req, res) => {
         })
         .catch((error) => {
             console.error(error);
-            res.status(201).send(error);
+            res.status(500).send(error);
         });
 });
 
@@ -545,11 +643,11 @@ app.get('/api/getAllDistReps/:id', (req, res) => {
         },
     })
         .then((result) => {
-            console.log(result);
             res.status(200).json(result);
         })
         .catch((error) => {
             console.error(error);
+            res.status(500).send(error);
         });
 });
 
@@ -566,7 +664,7 @@ app.post('/api/initialize', (req, res) => {
         rep_id,
         total_price,
         masterSet, //an array with inventory objects for par list
-        weeklySet, //an array with inventory objects for current inventory level
+        currentSet, //an array with inventory objects for current inventory level
     } = req.body;
 
     // let master = 0;
@@ -613,12 +711,12 @@ app.post('/api/initialize', (req, res) => {
     });
     };
 
-    const makeWeekly = () => {
-        let payments = weeklySet.map((weeklyItem) => weeklyItem.price * weeklyItem.qty);
+    const makeCurrent = () => {
+        let payments = currentSet.map((currentItem) => currentItem.price * currentItem.qty);
         let totalPayment = payments.reduce((a, b) => a + b, 0)
         return models.Logs.create({
             admin_id,
-            type: 2,
+            type: 5,
             dist_id,
             rep_id,
             total_price: totalPayment,
@@ -628,13 +726,23 @@ app.post('/api/initialize', (req, res) => {
         }
         )
             .then((log) => {
-                return weeklySet.forEach((weeklyItem) => {
+                currentSet.forEach((currentItem) => {
                     models.LogsProducts.create({
                         log_id: log.id,
-                        dist_products_id: weeklyItem.id,
-                        qty: weeklyItem.qty,
+                        dist_products_id: currentItem.id,
+                        qty: currentItem.qty,
                     });
                 });
+                return log.id;
+            })
+            .then((current) => {
+                models.Organizations.update({
+                    current_inventory: current,
+                }, {
+                    where: {
+                        id: admin_id,
+                    }
+                })
             })
             .then((result) => {
                 res.status(201).send('Weekly Initialized');
@@ -644,7 +752,7 @@ app.post('/api/initialize', (req, res) => {
             });
     };
 
-    Promise.all([makeMaster(), makeWeekly()])
+    Promise.all([makeMaster(), makeCurrent()])
     .then((values) => {
         console.log(values);
     });
@@ -654,18 +762,31 @@ app.post('/api/initialize', (req, res) => {
 //**********************
 // Get Master Inventory
 //**********************
-app.get('/api/getMaster/:id', (req, res) => {
+app.get('/api/getMaster/:orgId', (req, res) => {
     const {
-        id,
+        orgId,
     } = req.params;
-    models.Logs.findOne({
+    models.Logs.findAll({
         where: {
-            id,
-            master_inventory: 1,
+            admin_id: orgId,
+            type: 1,
         },
         include: [{
-            model: models.Products,
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
         }]
+        })
+        .then((master) => {
+            res.status(200).json(master);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
         })
     })
 
@@ -675,73 +796,471 @@ app.get('/api/getMaster/:id', (req, res) => {
 //*************************
 // Update Master Inventory
 //*************************
+app.put('/api/updateMaster/:masterId', (req, res) => {
+    const {
+        masterId,
+    } = req.params;
+    const {
+        masterSet,
+    } = req.body;
+    masterSet.forEach((masterItem) => {
+        return models.LogsProducts.upsert({
+            id: masterItem.id,
+            logId: masterId,
+            distributorsProductId: masterItem.distributorsProductId,
+            qty: masterItem.qty,
+        })
+        .then((upserted) => {
+            console.log(upserted);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        })
+    });
+    res.status(201).send('Updated Master');
+});
 
 
 //**********************
 // Get Current Inventory
 //**********************
+app.get('/api/getCurrent/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 5,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((master) => {
+            res.status(200).json(master);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**************************
 // Update Current Inventory
 //**************************
+app.put('/api/updateCurrent/:currentId', (req, res) => {
+    const {
+        currentId,
+    } = req.params;
+    const {
+        currentSet,
+    } = req.body;
+    currentSet.forEach((currentItem) => {
+        return models.LogsProducts.upsert({
+            id: currentItem.id,
+            logId: currentId,
+            distributorsProductId: masterItem.distributorsProductId,
+            qty: currentItem.qty,
+        })
+            .then((upserted) => {
+                console.log(upserted);
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send(error);
+            })
+    });
+    res.status(201).send('Updated Current Inventory');
+});
 
 //**********************
 // Get Any Inventory
 //**********************
+app.get('/api/getInvent/:invId', (req, res) => {
+    const {
+        invId,
+    } = req.params;
+    models.Logs.findOne({
+        where: {
+            id: invId,
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventory) => {
+            res.status(200).json(inventory);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**********************
 // Get All Inventories
 //**********************
+app.get('/api/getAllInvents/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 1 || 5 || 2, //this will pull your master, current, and weekly logs
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventories) => {
+            res.status(200).json(inventories);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
+
+//**********************
+// Make a Weekly Log
+//**********************
+app.post('api/makeWeekly', (req, res) => {
+const {
+admin_id,
+    type,
+    dist_id,
+    rep_id,
+    total_price,
+    weeklySet, //an array with inventory objects for current inventory level
+    } = req.body;
+
+    return models.Logs.create({
+        admin_id,
+        type: 2,
+        dist_id,
+        rep_id,
+    }, {
+        returning: true,
+        plain: true,
+    }
+    )
+        .then((log) => {
+            weeklySet.forEach((weeklyItem) => {
+                models.LogsProducts.create({
+                    log_id: log.id,
+                    dist_products_id: weeklyItem.id,
+                    qty: weeklyItem.qty,
+                });
+            });
+            return log.id;
+        })
+        .then((result) => {
+            res.send('Weekly Logged');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+});
+
 
 //*************************************************************************************** */
 
 //**********************
 // Place an Order
 //**********************
+app.post('api/placeOrder', (req, res) => {
+    const {
+        admin_id,
+        type,
+        dist_id,
+        rep_id,
+        total_price,
+        weeklySet, //an array with inventory objects for current order
+    } = req.body;
+
+    return models.Logs.create({
+        admin_id,
+        type: 3,
+        dist_id,
+        rep_id,
+        total_price,
+    }, {
+        returning: true,
+        plain: true,
+    }
+    )
+        .then((log) => {
+            weeklySet.forEach((weeklyItem) => {
+                models.LogsProducts.create({
+                    log_id: log.id,
+                    dist_products_id: weeklyItem.id,
+                    qty: weeklyItem.qty,
+                });
+            });
+            return log.id;
+        })
+        .then((result) => {
+            res.send('Weekly Logged');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+});
 
 //**********************
 // Get Any Order
 //**********************
 
+// Just use the route for Get Any Inventory
+
 //**********************
 // Get All Orders
 //**********************
+app.get('/api/getAllOrders/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 3, //this will pull only your orders
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((inventories) => {
+            res.status(200).json(inventories);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
+
 
 //**********************
 // Delete an Order
 //**********************
+
+// I took this out. Why would the client need to delete the log of an order?
+// I can reinstall it if we want to support that kind of madness
 
 //*************************************************************************************** */
 
 //**********************
 // Post an invoice
 //**********************
+app.post('api/recordInvoice', (req, res) => {
+    const {
+        admin_id,
+        type,
+        dist_id,
+        rep_id,
+        total_price,
+        receiptSet, //an array with inventory objects for current inventory level
+    } = req.body;
+
+    return models.Logs.create({
+        admin_id,
+        type: 4,
+        dist_id,
+        rep_id,
+        total_price,
+    }, {
+        returning: true,
+        plain: true,
+    }
+    )
+        .then((log) => {
+            receiptSet.forEach((receiptItem) => {
+                models.LogsProducts.create({
+                    log_id: log.id,
+                    dist_products_id: receiptItem.id,
+                    qty: receiptItem.qty,
+                });
+            });
+            return log.id;
+        })
+        .then((result) => {
+            res.send('Invoice Logged');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
 
 //**********************
 // Get Any Invoice
 //**********************
 
+//see get any order / get any inventory
+
 //**********************
 // Get All Invoices
 //**********************
+app.get('/api/getAllInvoices/:orgId', (req, res) => {
+    const {
+        orgId,
+    } = req.params;
+    models.Logs.findAll({
+        where: {
+            admin_id: orgId,
+            type: 4, //this will pull only your invoices
+        },
+        include: [{
+            model: models.LogsProducts,
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                }]
+            }]
+        }]
+    })
+        .then((invoices) => {
+            res.status(200).json(invoices);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        })
+})
 
 //**********************
 // Delete An Invoice
 //**********************
+app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
+    const {
+        receiptId,
+    } = req.params;
+    models.Reps.destroy({
+        where: {
+            id: receiptId,
+        },
+    })
+        .then(() => {
+            res.send({
+                deleted: true
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send(error);
+        });
+});
 
 //*************************************************************************************** */
 
 //**********************
-// Add Open Bottle
+// Add/Update Open Bottles
 //**********************
+app.put('/api/newWeights/:orgId', (req, res) => {
+    const {
+        bottleSet,
+    } = req.body;
+    const {
+        orgId,
+    } = req.params;
+    bottleSet.forEach((bottle) => {
+        return models.OpenBottles.upsert({
+            id: bottle.id,
+            org_id: orgId,
+            product_id: bottle.product_id,
+            weight: bottle.weight,
+        })
+            .then((upserted) => {
+                console.log(upserted);
+                res.end('STATUS: 201. Weight Updated!');
+            })
+            .catch((error) => {
+                console.error(error);
+                res.send('STATUS: 500.');
+                res.send(error);
+            })
+    });
+})
 
-//**********************
-// Update Open Bottle
-//**********************
 
 //**********************
 // Get All Open Bottles
 //**********************
+app.get('/api/getAllBottles/:orgId', (req, res) => {
+    const {
+        orgId
+    } = req.params;
+    return models.OpenBottles.findAll({
+        where: {
+            org_id: orgId,
+        },
+        include: [{
+            model: models.DistributorsProducts,
+            include: [{
+                model: models.Products,
+            }]
+        }]
+    })
+    .then((openBottles) => {
+        res.status(200).json(openBottles);
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send(error);
+    })
+})
+
+//**********************
+// Delete a Bottle
+//**********************
+    app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
+        const {
+            bottleId,
+        } = req.params;
+        models.OpenBottles.destroy({
+            where: {
+                id: bottleId,
+            },
+        })
+            .then(() => {
+                res.send({
+                    deleted: true
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send(error);
+            });
+    });
+
 
 
 //*************************************************************************************** */
