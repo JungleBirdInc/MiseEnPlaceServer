@@ -56,6 +56,16 @@ const Categories = sequelize.define('categories', {
         type: Sequelize.STRING,
         allowNull: true,
     },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,
@@ -468,7 +478,17 @@ const Products = sequelize.define('products', {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    categoryId: {
+        field: 'category_id',
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
     sub_category_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    subcategoryId: {
+        field: 'sub_category_id',
         type: Sequelize.INTEGER,
         allowNull: true,
     },
@@ -582,10 +602,25 @@ const Subcategories = sequelize.define('subcategories', {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    categoryId: {
+        field: 'category_id',
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
     subcategory_name: {
         type: Sequelize.STRING,
         allowNull: false,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,
@@ -662,6 +697,15 @@ Organizations.hasMany(DistOrgs);
 
 DistributorsProducts.hasMany(OpenBottles);
 OpenBottles.belongsTo(DistributorsProducts);
+
+Categories.hasMany(Products);
+Products.belongsTo(Categories);
+
+Subcategories.hasMany(Products);
+Products.belongsTo(Subcategories);
+
+Categories.hasMany(Subcategories);
+Subcategories.belongsTo(Categories);
 
 
 

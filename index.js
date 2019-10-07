@@ -8,8 +8,18 @@ const axios = require('axios');
 const moment = require('moment');
 
 const models = require('./app/models/db.js');
+const user = require('./routes/user.js');
+const distributor = require('./routes/distributor.js');
+const inventory = require('./routes/inventory.js');
+const invoice = require('./routes/invoice.js');
+const openBottles = require('./routes/openbottles.js');
+const order = require('./routes/order.js');
+const organization = require('./routes/organization.js');
+const product = require('./routes/product.js');
+const reps = require('./routes/reps.js');
 
 const app = express();
+const router = express.Router();
 
 app.use(bodyParser.urlencoded({
     extended: true,
@@ -503,6 +513,12 @@ app.get('/api/getDistProd/:id', (req, res) => {
         },
         include: [{
             model: models.Products,
+            include: [{
+                model: models.Subcategories,
+                include: [{
+                    model: models.Categories,
+                }]
+            }]
         }]
     })
         .then((result) => {
@@ -528,6 +544,12 @@ app.get('/api/getAllDistProd/:id', (req, res) => {
         },
         include: [{
             model: models.Products,
+            include: [{
+                model: models.Subcategories,
+                include: [{
+                    model: models.Categories,
+                }]
+            }]
         }]
     })
         .then((result) => {
