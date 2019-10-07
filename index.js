@@ -513,6 +513,12 @@ app.get('/api/getDistProd/:id', (req, res) => {
         },
         include: [{
             model: models.Products,
+            include: [{
+                model: models.Subcategories,
+                include: [{
+                    model: models.Categories,
+                }]
+            }]
         }]
     })
         .then((result) => {
@@ -538,6 +544,12 @@ app.get('/api/getAllDistProd/:id', (req, res) => {
         },
         include: [{
             model: models.Products,
+            include: [{
+                model: models.Subcategories,
+                include: [{
+                    model: models.Categories,
+                }]
+            }]
         }]
     })
         .then((result) => {
