@@ -152,14 +152,22 @@ app.use('/invoice', invoice);
 //*************************************************************************************** */
 app.use('/openBottles', openBottles);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Add/Update Open Bottles"
+ *  ~ endpoint: '/openBottles/newWeights/:orgId'
+ *  ~ method: PUT
+ *  ~ records the new weights of open bottles. New entries will be created if a bottle isnt found
+ * ROUTE: "Get All Open Bottles"
+ *  ~ endpoint: '/openBottles/getAllBottles/:orgId'
+ *  ~ method: GET
+ *  ~ get all open bottles for an organization. 
+ * ROUTE: "Delete a Bottle"
+ *  ~ endpoint: '/openBottles/deleteBottle/:bottleId'
+ *  ~ method: GET
+ *  ~ gets all invoice records for a distributor
+ * ROUTE: "Delete an Invoice"
+ *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
+ *  ~ method: DELETE
+ *  ~ deletes the record of an invoice
 //*************************************************************************************** */
 app.use('/order', order);
 //*************************************************************************************** */

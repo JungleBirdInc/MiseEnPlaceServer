@@ -496,6 +496,11 @@ const Products = sequelize.define('products', {
         type: Sequelize.STRING,
         allowNull: true,
     },
+    btlSizeId: {
+        field: 'size',
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
     notes: {
         type: Sequelize.STRING,
         allowNull: true,
