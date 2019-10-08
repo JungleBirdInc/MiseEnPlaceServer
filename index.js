@@ -200,15 +200,15 @@ app.use('/product', product);
 //*************************************************************************************** */
 /* ROUTE: "Create a Product"
     REFACTOR REFACTOR REFACTOR ( This needs to be an upsert )
- *  ~ endpoint: '/product/createProduct'
+ *  ~ endpoint: '/product/create'
  *  ~ method: POST
  *  ~ creates a new Product. searches by UPC code and selects that product if it already exists
  * ROUTE: "Get A Distributor Product"
- *  ~ endpoint: '/product/getDistProd/:id'
+ *  ~ endpoint: '/product/getOne/:id'
  *  ~ method: GET
  *  ~ gets a product from a distributor list by the product's id
  * ROUTE: "Get ALL Distributor Products"
- *  ~ endpoint: '/product/getAllDistProd/:id'
+ *  ~ endpoint: '/product/getAll/:id'
  *  ~ method: GET
  *  ~ gets all products for a distributor by the distributor id
 //*************************************************************************************** */
