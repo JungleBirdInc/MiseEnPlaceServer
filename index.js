@@ -127,7 +127,7 @@ app.use('/inventory', inventory);
  *  ~ gets all relevant inventories for an account, including master and current.
  *       DO NOT display master and current as logs. Remove them from the array before populating lists
  * ROUTE: "Make a Weekly Log"
- *  ~ endpoint: '/inventory/makeWeekly''
+ *  ~ endpoint: '/inventory/makeWeekly'
  *  ~ method: POST
  *  ~ takes the current inventory levels, and makes a record of them. 
 //*************************************************************************************** */
@@ -169,15 +169,15 @@ app.use('/order', order);
 //*************************************************************************************** */
 /* ROUTE: "Place an Order"
     REFACTOR REFACTOR REFACTOR ( CURRENTLY DOES NOT PLACE THE ORDER )
- *  ~ endpoint: 'order/placeOrder'
+ *  ~ endpoint: 'order/send'
  *  ~ method: POST
  *  ~ records a new order
  * ROUTE: "Get Any Order"
- *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ endpoint: '/inventory/getOne/:invId'
  *  ~ method: GET
  *  ~ same route as get any inventory
  * ROUTE: "Get All Orders"
- *  ~ endpoint: '/order/getAllOrders/:orgId'
+ *  ~ endpoint: '/order/getAll/:orgId'
  *  ~ gets all order records for an organization
 //*************************************************************************************** */
 app.use('/organization', organization);
