@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Initialize Inventory
 //**********************
-app.post('/api/initialize', (req, res) => {
+app.post('/initialize', (req, res) => {
     const {
         admin_id,
         type,
@@ -112,7 +112,7 @@ app.post('/api/initialize', (req, res) => {
 //**********************
 // Get Master Inventory
 //**********************
-app.get('/api/getMaster/:orgId', (req, res) => {
+app.get('/getMaster/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;
@@ -175,7 +175,7 @@ app.put('/api/updateMaster/:masterId', (req, res) => {
 //**********************
 // Get Current Inventory
 //**********************
-app.get('/api/getCurrent/:orgId', (req, res) => {
+app.get('/getCurrent/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;
@@ -206,7 +206,7 @@ app.get('/api/getCurrent/:orgId', (req, res) => {
 //**************************
 // Update Current Inventory
 //**************************
-app.put('/api/updateCurrent/:currentId', (req, res) => {
+app.put('/updateCurrent/:currentId', (req, res) => {
     const {
         currentId,
     } = req.params;
@@ -264,7 +264,7 @@ app.get('/api/getInvent/:invId', (req, res) => {
 //**********************
 // Get All Inventories
 //**********************
-app.get('/api/getAllInvents/:orgId', (req, res) => {
+app.get('/getAllInvents/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;
@@ -295,7 +295,7 @@ app.get('/api/getAllInvents/:orgId', (req, res) => {
 //**********************
 // Make a Weekly Log
 //**********************
-app.post('api/makeWeekly', (req, res) => {
+app.post('/makeWeekly', (req, res) => {
     const {
         admin_id,
         type,
