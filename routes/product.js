@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Create Product
 //**********************
-router.post('/createProduct', (req, res) => {
+router.post('/create', (req, res) => {
     const {
         upc,
         product_name,
@@ -59,7 +59,7 @@ router.post('/createProduct', (req, res) => {
 //***************************
 // Get a DistributorProduct
 //***************************
-router.get('/api/getDistProd/:id', (req, res) => {
+router.get('/getOne/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -89,7 +89,8 @@ router.get('/api/getDistProd/:id', (req, res) => {
 
 //******************************
 // Get ALL DistributorProducts
-router.get('/api/getAllDistProd/:id', (req, res) => {
+//******************************
+router.get('/getAll/:id', (req, res) => {
     const {
         id,
     } = req.params;
