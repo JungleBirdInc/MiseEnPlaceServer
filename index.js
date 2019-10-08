@@ -206,30 +206,31 @@ app.use('/product', product);
     REFACTOR REFACTOR REFACTOR ( This needs to be an upsert )
  *  ~ endpoint: '/product/createProduct'
  *  ~ method: POST
- *  ~ 
- * ROUTE: "Get All Open Bottles"
- *  ~ endpoint: '/openBottles/getAllBottles/:orgId'
+ *  ~ creates a new Product. searches by UPC code and selects that product if it already exists
+ * ROUTE: "Get A Distributor Product"
+ *  ~ endpoint: '/product/getDistProd/:id'
  *  ~ method: GET
- *  ~ get all open bottles for an organization.
- * ROUTE: "Delete a Bottle"
- *  ~ endpoint: '/openBottles/deleteBottle/:bottleId'
+ *  ~ gets a product from a distributor list by the product's id
+ * ROUTE: "Get ALL Distributor Products"
+ *  ~ endpoint: '/product/getAllDistProd/:id'
  *  ~ method: GET
- *  ~ gets all invoice records for a distributor
- * ROUTE: "Delete an Invoice"
- *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
- *  ~ method: DELETE
- *  ~ deletes the record of an invoice
+ *  ~ gets all products for a distributor by the distributor id
 //*************************************************************************************** */
 app.use('/reps', reps);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Create Organization"
+    REFACTOR REFACTOR REFACTOR (Should update user with orgId after creation)
+ *  ~ endpoint: '/organization/createOrg'
+ *  ~ method: POST
+ *  ~ creates an organization
+ * ROUTE: "Update Organization"
+ *  ~ endpoint: '/organization/updateOrg/:id'
+ *  ~ method: PUT
+ *  ~ updates the organization, selected by its id number
+ * ROUTE: "Delete an Organization"
+ *  ~ endpoint: '/organization/deleteOrg/:id'
+ *  ~ method: DELETE
+ *  ~ deletes an organization
 //*************************************************************************************** */
 app.use('/forecasting', forecasting);
 //*************************************************************************************** */

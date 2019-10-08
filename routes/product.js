@@ -59,7 +59,7 @@ router.post('/createProduct', (req, res) => {
 //***************************
 // Get a DistributorProduct
 //***************************
-router.get('/api/getDistProd/:id', (req, res) => {
+router.get('/getDistProd/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -89,6 +89,7 @@ router.get('/api/getDistProd/:id', (req, res) => {
 
 //******************************
 // Get ALL DistributorProducts
+//******************************
 router.get('/api/getAllDistProd/:id', (req, res) => {
     const {
         id,
