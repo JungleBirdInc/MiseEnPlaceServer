@@ -215,19 +215,19 @@ app.use('/product', product);
 app.use('/reps', reps);
 //*************************************************************************************** */
 /* ROUTE: "Create a Rep"
- *  ~ endpoint: '/reps/createRep'
+ *  ~ endpoint: '/reps/create'
  *  ~ method: POST
  *  ~ creates a rep
  * ROUTE: "Update Rep"
- *  ~ endpoint: '/reps/updateRep/:id'
+ *  ~ endpoint: '/reps/update/:id'
  *  ~ method: PUT
  *  ~ updates a reps information
  * ROUTE: "Delete an Organization"
- *  ~ endpoint: '/reps/deleteRep/:id'
+ *  ~ endpoint: '/reps/delete/:id'
  *  ~ method: DELETE
  *  ~ deletes a rep
  * ROUTE: "Get All Reps"
- *  ~ endpoint: '/reps/getAllDistReps/:id'
+ *  ~ endpoint: '/reps/getAll/:id'
  *  ~ method: GET
  *  ~ gets all reps from a distributor by it's id
 //*************************************************************************************** */
@@ -242,6 +242,12 @@ app.use('/forecasting', forecasting);
  *
  *
 */
+
+
+
+
+
+
 //**********************
 // Create User
 //**********************
