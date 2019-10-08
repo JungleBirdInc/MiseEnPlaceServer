@@ -234,10 +234,14 @@ app.use('/reps', reps);
  * //*************************************************************************************** */
 app.use('/categories', categories);
 //*************************************************************************************** */
-/*
- *
- *
- *
+/* ROUTE: "Get All Categories"
+ *  ~ endpoint: '/categories/categories'
+ *  ~ method: POST
+ *  ~ creates a rep
+ * ROUTE: "Get All Subcategories"
+ *  ~ endpoint: '/categories/subcategories'
+ *  ~ method: PUT
+ *  ~ updates a reps information
  *
  *
  *

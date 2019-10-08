@@ -7,7 +7,11 @@ const models = require('../app/models/db.js');
 // Get All Product Categories
 //***************************
 router.get('/categories', (req, res) => {
-    models.Categories.findAll()
+    models.Categories.findAll({
+        include: [{
+            model: models.Subcategories,
+        }]
+    })
     .then((categories) => {
         res.status(200).json(categories);
     })
