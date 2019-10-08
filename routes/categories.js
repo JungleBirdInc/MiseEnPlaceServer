@@ -20,7 +20,7 @@ router.get('/categories', (req, res) => {
         res.status(500).json(error);
     })
 });
-
+        
 //***************************
 // Get All Product Subcategories
 //***************************
