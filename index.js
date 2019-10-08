@@ -97,7 +97,7 @@ app.use('/inventory', inventory);
  *      to reflect that assignment
  * ROUTE: "Get Master Inventory"
  *  REFACTOR REFACTOR REFACTOR (combine with other get inventories)
- *  ~ endpoint: ''/inventory/getMaster/:orgId''
+ *  ~ endpoint: '/inventory/getMaster/:orgId'
  *  ~ method: GET
  *  ~ retrieves the master par list for an organization
  * ROUTE: "Update Master Inventory"
@@ -118,11 +118,11 @@ app.use('/inventory', inventory);
  *      WILL NOT update par levels, so make sure you update master if the items will be reordered
  * ROUTE: "Get ANY Inventory"
  *  REFACTOR REFACTOR REFACTOR (combine with other get inventories)
- *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ endpoint: '/inventory/getOne/:invId'
  *  ~ method: GET
  *  ~ gets an inventory by id number
  * ROUTE: "Get ALL Inventories"
- *  ~ endpoint: '/inventory/getAllInvents/:orgId'
+ *  ~ endpoint: '/inventory/getAll/:orgId'
  *  ~ method: GET
  *  ~ gets all relevant inventories for an account, including master and current.
  *       DO NOT display master and current as logs. Remove them from the array before populating lists
