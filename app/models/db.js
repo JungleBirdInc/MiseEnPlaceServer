@@ -476,12 +476,12 @@ const Products = sequelize.define('products', {
     },
     category_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     categoryId: {
         field: 'category_id',
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     sub_category_id: {
         type: Sequelize.INTEGER,
@@ -492,7 +492,8 @@ const Products = sequelize.define('products', {
         type: Sequelize.INTEGER,
         allowNull: true,
     },
-    size: {
+    btlSizeId: {
+        field: 'size',
         type: Sequelize.STRING,
         allowNull: true,
     },

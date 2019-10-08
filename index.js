@@ -202,14 +202,23 @@ app.use('/organization', organization);
 //*************************************************************************************** */
 app.use('/product', product);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Create a Product"
+    REFACTOR REFACTOR REFACTOR ( This needs to be an upsert )
+ *  ~ endpoint: '/product/createProduct'
+ *  ~ method: POST
+ *  ~ 
+ * ROUTE: "Get All Open Bottles"
+ *  ~ endpoint: '/openBottles/getAllBottles/:orgId'
+ *  ~ method: GET
+ *  ~ get all open bottles for an organization.
+ * ROUTE: "Delete a Bottle"
+ *  ~ endpoint: '/openBottles/deleteBottle/:bottleId'
+ *  ~ method: GET
+ *  ~ gets all invoice records for a distributor
+ * ROUTE: "Delete an Invoice"
+ *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
+ *  ~ method: DELETE
+ *  ~ deletes the record of an invoice
 //*************************************************************************************** */
 app.use('/reps', reps);
 //*************************************************************************************** */
@@ -646,9 +655,9 @@ app.post('/api/createProduct', (req, res) => {
     const {
         upc,
         product_name,
-        category_id,
-        sub_category_id,
-        size,
+        categoryId,
+        subcategoryId,
+        btlSizeId,
         notes,
         tare,
         dist_id,
@@ -661,9 +670,9 @@ app.post('/api/createProduct', (req, res) => {
         defaults: {
             upc,
             product_name,
-            category_id,
-            sub_category_id,
-            size,
+            categoryId,
+            subcategoryId,
+            btlSizeId,
             notes,
             tare,
         },

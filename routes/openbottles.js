@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Add/Update Open Bottles
 //**********************
-app.put('/newWeights/:orgId', (req, res) => {
+router.put('/newWeights/:orgId', (req, res) => {
     const {
         bottleSet,
     } = req.body;
@@ -36,7 +36,7 @@ app.put('/newWeights/:orgId', (req, res) => {
 //**********************
 // Get All Open Bottles
 //**********************
-app.get('/getAllBottles/:orgId', (req, res) => {
+router.get('/getAllBottles/:orgId', (req, res) => {
     const {
         orgId
     } = req.params;
@@ -63,7 +63,7 @@ app.get('/getAllBottles/:orgId', (req, res) => {
 //**********************
 // Delete a Bottle
 //**********************
-app.delete('/deleteBottle/:bottleId', (req, res) => {
+router.delete('/deleteBottle/:bottleId', (req, res) => {
     const {
         bottleId,
     } = req.params;
