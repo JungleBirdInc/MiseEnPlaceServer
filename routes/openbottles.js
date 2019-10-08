@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Add/Update Open Bottles
 //**********************
-app.put('/api/newWeights/:orgId', (req, res) => {
+app.put('/newWeights/:orgId', (req, res) => {
     const {
         bottleSet,
     } = req.body;
@@ -36,7 +36,7 @@ app.put('/api/newWeights/:orgId', (req, res) => {
 //**********************
 // Get All Open Bottles
 //**********************
-app.get('/api/getAllBottles/:orgId', (req, res) => {
+app.get('/getAllBottles/:orgId', (req, res) => {
     const {
         orgId
     } = req.params;
@@ -63,7 +63,7 @@ app.get('/api/getAllBottles/:orgId', (req, res) => {
 //**********************
 // Delete a Bottle
 //**********************
-app.delete('/api/deleteInvoice/:receiptId', (req, res) => {
+app.delete('/deleteBottle/:bottleId', (req, res) => {
     const {
         bottleId,
     } = req.params;

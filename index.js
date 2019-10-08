@@ -45,49 +45,132 @@ app.use(express.static(pathway));
 //*************************************************************************************** */
 app.use('/user', user);
 //*************************************************************************************** */
-/*
- *
- *
- *
- * 
- * 
- * 
+/* ROUTE: "Create User"
+ *  ~ endpoint: 'user/createUser'
+ *  ~ method: POST
+ *  ~ creates a user
+ * ROUTE: "Update User"
+ *  ~ endpoint: '/user/updateUser/:id'
+ *  ~ method: PUT
+ *  ~ updates a user
+ * ROUTE: "Delete User"
+ *  ~ endpoint: '/user/deleteUser/:id'
+ *  ~ method: DELETE
+ *  ~ deletes a user
+ * ROUTE: "Get All Users"
+ * ~ endpoint: '/user/getAllUsers/:id'
+ * ~ method: GET
+ * ~ gets all user for an organization
 //*************************************************************************************** */
 app.use('/distributor', distributor);
 //*************************************************************************************** */
-/*
- *
- * 
- * 
- * 
- * 
- * 
+/* ROUTE: "Create Distributor"
+ *  ~ endpoint: '/distributor/createDist'
+ *  ~ method: POST
+ *  ~ creates a distributor
+ * ROUTE: "Update Distributor"
+ *  ~ endpoint: '/distributor/updateDist/:id'
+ *  ~ method: PUT
+ *  ~ updates a distributor
+ * ROUTE: "Delete Distributor"
+ *  ~ endpoint: '/distributor/deleteDist/:id'
+ *  ~ method: DELETE
+ *  ~ deletes a distributor
+ * ROUTE: "Get a Distributor"
+ *  ~ endpoint: '/distributor/getDist/:distId'
+ *  ~ method: GET
+ *  ~ gets an individual distributor by its id
+ * ROUTE: "Get all Distributors"
+ *  ~ endpoint: '/distributor/getAllDists/:orgId'
+ *  ~ method: GET
+ *  ~ gets all distributors for an organization by the organization's id
  * 
 //*************************************************************************************** */
 app.use('/inventory', inventory);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Initialize Inventory"
+ *  ~ endpoint: '/inventory/initialize'
+ *  ~ method: POST
+ *  ~ initializes inventory for an organization. creates a master inventory with pars
+ *      then sets that inventory as the master inventory for the org
+ *  ~ creates a current inventory from an organization, and then updates the organization
+ *      to reflect that assignment
+ * ROUTE: "Get Master Inventory"
+ *  REFACTOR REFACTOR REFACTOR (combine with other get inventories)
+ *  ~ endpoint: ''/inventory/getMaster/:orgId''
+ *  ~ method: GET
+ *  ~ retrieves the master par list for an organization
+ * ROUTE: "Update Master Inventory"
+ *  ~ endpoint: '/inventory/updateMaster/:masterId'
+ *  ~ method: PUT
+ *  ~ updates the par levels for the master inventory. If a new product and par are
+ *      detected, creates a new entry on the master
+ *  ~ masterId is the id of the master inventory.
+ * ROUTE: "Get Current Inventory"
+ *  REFACTOR REFACTOR REFACTOR (combine with other get inventories)
+ *  ~ endpoint: '/inventory/getCurrent/:orgId'
+ *  ~ method: GET
+ *  ~ gets the current inventory levels for an organization
+ * ROUTE: "Update Current Inventory"
+ *  ~ endpoint: '/inventory/updateCurrent/:currentId'
+ *  ~ method: PUT
+ *  ~ updates the current inventory. Will create new entries if existing entry is detected.
+ *      WILL NOT update par levels, so make sure you update master if the items will be reordered
+ * ROUTE: "Get ANY Inventory"
+ *  REFACTOR REFACTOR REFACTOR (combine with other get inventories)
+ *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ method: GET
+ *  ~ gets an inventory by id number
+ * ROUTE: "Get ALL Inventories"
+ *  ~ endpoint: '/inventory/getAllInvents/:orgId'
+ *  ~ method: GET
+ *  ~ gets all relevant inventories for an account, including master and current.
+ *       DO NOT display master and current as logs. Remove them from the array before populating lists
+ * ROUTE: "Make a Weekly Log"
+ *  ~ endpoint: '/inventory/makeWeekly''
+ *  ~ method: POST
+ *  ~ takes the current inventory levels, and makes a record of them. 
 //*************************************************************************************** */
 app.use('/invoice', invoice);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Record an Invoice"
+ *  ~ endpoint: '/invoice/recordInvoice'
+ *  ~ method: POST
+ *  ~ records an incoming invoice
+ * ROUTE: "Get Any Invoice"
+ *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ method: GET
+ *  ~ get any invoice. Same route as get any inventory. 
+ * ROUTE: "Get All Invoices"
+ *  ~ endpoint: '/invoice/getAllInvoices/:orgId'
+ *  ~ method: GET
+ *  ~ gets all invoice records for a distributor
+ * ROUTE: "Delete an Invoice"
+ *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
+ *  ~ method: DELETE
+ *  ~ deletes the record of an invoice
 //*************************************************************************************** */
 app.use('/openBottles', openBottles);
 //*************************************************************************************** */
+/* ROUTE: "Add/Update Open Bottles"
+ *  ~ endpoint: '/openBottles/newWeights/:orgId'
+ *  ~ method: PUT
+ *  ~ records the new weights of open bottles. New entries will be created if a bottle isnt found
+ * ROUTE: "Get All Open Bottles"
+ *  ~ endpoint: '/openBottles/getAllBottles/:orgId'
+ *  ~ method: GET
+ *  ~ get all open bottles for an organization. 
+ * ROUTE: "Delete a Bottle"
+ *  ~ endpoint: '/openBottles/deleteBottle/:bottleId'
+ *  ~ method: GET
+ *  ~ gets all invoice records for a distributor
+ * ROUTE: "Delete an Invoice"
+ *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
+ *  ~ method: DELETE
+ *  ~ deletes the record of an invoice
+//*************************************************************************************** */
+app.use('/order', order);
+//*************************************************************************************** */
 /*
  *
  *
@@ -97,26 +180,50 @@ app.use('/openBottles', openBottles);
  *
  *
 //*************************************************************************************** */
-app.use('/order', order);
-//*************************************************************************************** */
-
-//*************************************************************************************** */
 app.use('/organization', organization);
 //*************************************************************************************** */
-
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
 //*************************************************************************************** */
 app.use('/product', product);
 //*************************************************************************************** */
-
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
 //*************************************************************************************** */
 app.use('/reps', reps);
 //*************************************************************************************** */
-
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
 //*************************************************************************************** */
 app.use('/forecasting', forecasting);
 //*************************************************************************************** */
-
-
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+*/
 //**********************
 // Create User
 //**********************
