@@ -171,36 +171,54 @@ app.use('/openBottles', openBottles);
 //*************************************************************************************** */
 app.use('/order', order);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Place an Order"
+    REFACTOR REFACTOR REFACTOR ( CURRENTLY DOES NOT PLACE THE ORDER )
+ *  ~ endpoint: 'order/placeOrder'
+ *  ~ method: POST
+ *  ~ records a new order
+ * ROUTE: "Get Any Order"
+ *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ method: GET
+ *  ~ same route as get any inventory
+ * ROUTE: "Get All Orders"
+ *  ~ endpoint: '/order/getAllOrders/:orgId'
+ *  ~ gets all order records for an organization
 //*************************************************************************************** */
 app.use('/organization', organization);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Create Organization"
+    REFACTOR REFACTOR REFACTOR (Should update user with orgId after creation)
+ *  ~ endpoint: '/organization/createOrg'
+ *  ~ method: POST
+ *  ~ creates an organization
+ * ROUTE: "Update Organization"
+ *  ~ endpoint: '/organization/updateOrg/:id'
+ *  ~ method: PUT
+ *  ~ updates the organization, selected by its id number
+ * ROUTE: "Delete an Organization"
+ *  ~ endpoint: '/organization/deleteOrg/:id'
+ *  ~ method: DELETE
+ *  ~ deletes an organization
 //*************************************************************************************** */
 app.use('/product', product);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Create a Product"
+    REFACTOR REFACTOR REFACTOR ( This needs to be an upsert )
+ *  ~ endpoint: '/product/createProduct'
+ *  ~ method: POST
+ *  ~ 
+ * ROUTE: "Get All Open Bottles"
+ *  ~ endpoint: '/openBottles/getAllBottles/:orgId'
+ *  ~ method: GET
+ *  ~ get all open bottles for an organization.
+ * ROUTE: "Delete a Bottle"
+ *  ~ endpoint: '/openBottles/deleteBottle/:bottleId'
+ *  ~ method: GET
+ *  ~ gets all invoice records for a distributor
+ * ROUTE: "Delete an Invoice"
+ *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
+ *  ~ method: DELETE
+ *  ~ deletes the record of an invoice
 //*************************************************************************************** */
 app.use('/reps', reps);
 //*************************************************************************************** */
@@ -637,9 +655,9 @@ app.post('/api/createProduct', (req, res) => {
     const {
         upc,
         product_name,
-        category_id,
-        sub_category_id,
-        size,
+        categoryId,
+        subcategoryId,
+        btlSizeId,
         notes,
         tare,
         dist_id,
@@ -652,9 +670,9 @@ app.post('/api/createProduct', (req, res) => {
         defaults: {
             upc,
             product_name,
-            category_id,
-            sub_category_id,
-            size,
+            categoryId,
+            subcategoryId,
+            btlSizeId,
             notes,
             tare,
         },
