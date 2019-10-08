@@ -707,6 +707,10 @@ Products.belongsTo(Subcategories);
 Categories.hasMany(Subcategories);
 Subcategories.belongsTo(Categories);
 
+BtlSize.hasMany(Products);
+Products.belongsTo(BtlSize);
+
+
 
 
 
