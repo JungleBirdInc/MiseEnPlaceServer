@@ -138,7 +138,7 @@ app.use('/invoice', invoice);
  *  ~ method: POST
  *  ~ records an incoming invoice
  * ROUTE: "Get Any Invoice"
- *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ endpoint: '/invoice/getOne/:invId'
  *  ~ method: GET
  *  ~ get any invoice. Same route as get any inventory. 
  * ROUTE: "Get All Invoices"
@@ -173,7 +173,7 @@ app.use('/order', order);
  *  ~ method: POST
  *  ~ records a new order
  * ROUTE: "Get Any Order"
- *  ~ endpoint: '/inventory/getOne/:invId'
+ *  ~ endpoint: '/order/getOne/:invId'
  *  ~ method: GET
  *  ~ same route as get any inventory
  * ROUTE: "Get All Orders"
