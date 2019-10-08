@@ -218,19 +218,22 @@ app.use('/product', product);
 //*************************************************************************************** */
 app.use('/reps', reps);
 //*************************************************************************************** */
-/* ROUTE: "Create Organization"
-    REFACTOR REFACTOR REFACTOR (Should update user with orgId after creation)
- *  ~ endpoint: '/organization/createOrg'
+/* ROUTE: "Create a Rep"
+ *  ~ endpoint: '/reps/createRep'
  *  ~ method: POST
- *  ~ creates an organization
- * ROUTE: "Update Organization"
- *  ~ endpoint: '/organization/updateOrg/:id'
+ *  ~ creates a rep
+ * ROUTE: "Update Rep"
+ *  ~ endpoint: '/reps/updateRep/:id'
  *  ~ method: PUT
- *  ~ updates the organization, selected by its id number
+ *  ~ updates a reps information
  * ROUTE: "Delete an Organization"
- *  ~ endpoint: '/organization/deleteOrg/:id'
+ *  ~ endpoint: '/reps/deleteRep/:id'
  *  ~ method: DELETE
- *  ~ deletes an organization
+ *  ~ deletes a rep
+ * ROUTE: "Get All Reps"
+ *  ~ endpoint: '/reps/getAllDistReps/:id'
+ *  ~ method: GET
+ *  ~ gets all reps from a distributor by it's id
 //*************************************************************************************** */
 app.use('/forecasting', forecasting);
 //*************************************************************************************** */
