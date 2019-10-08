@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Create Rep
 //**********************
-router.post('/api/createRep', (req, res) => {
+router.post('/create', (req, res) => {
     const {
         first_name,
         last_name,
@@ -33,7 +33,7 @@ router.post('/api/createRep', (req, res) => {
 //**********************
 // Update Rep
 //**********************
-router.put('/api/updateRep/:id', (req, res) => {
+router.put('/update/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -68,7 +68,7 @@ router.put('/api/updateRep/:id', (req, res) => {
 //**********************
 // Delete Rep
 //**********************
-router.delete('/api/deleteRep/:id', (req, res) => {
+router.delete('/delete/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -91,7 +91,7 @@ router.delete('/api/deleteRep/:id', (req, res) => {
 //******************************
 // Get ALL Distributor Reps
 //******************************
-router.get('/api/getAllDistReps/:id', (req, res) => {
+router.get('/getAll/:id', (req, res) => {
     const {
         id,
     } = req.params;

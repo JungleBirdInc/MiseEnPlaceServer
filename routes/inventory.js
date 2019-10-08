@@ -146,7 +146,7 @@ router.get('/getMaster/:orgId', (req, res) => {
 //*************************
 // Update Master Inventory
 //*************************
-router.put('/api/updateMaster/:masterId', (req, res) => {
+router.put('/updateMaster/:masterId', (req, res) => {
     const {
         masterId,
     } = req.params;
@@ -234,7 +234,7 @@ router.put('/updateCurrent/:currentId', (req, res) => {
 //**********************
 // Get Any Inventory
 //**********************
-router.get('/api/getInvent/:invId', (req, res) => {
+router.get('/getOne/:invId', (req, res) => {
     const {
         invId,
     } = req.params;
@@ -264,7 +264,7 @@ router.get('/api/getInvent/:invId', (req, res) => {
 //**********************
 // Get All Inventories
 //**********************
-router.get('/getAllInvents/:orgId', (req, res) => {
+router.get('/getAll/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;

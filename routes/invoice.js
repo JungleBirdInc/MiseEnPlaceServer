@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Post an invoice
 //**********************
-router.post('/recordInvoice', (req, res) => {
+router.post('/record', (req, res) => {
     const {
         admin_id,
         type,
@@ -54,7 +54,7 @@ router.post('/recordInvoice', (req, res) => {
 //**********************
 // Get All Invoices
 //**********************
-router.get('/getAllInvoices/:orgId', (req, res) => {
+router.get('/getAll/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;
@@ -85,7 +85,7 @@ router.get('/getAllInvoices/:orgId', (req, res) => {
 //**********************
 // Delete An Invoice
 //**********************
-router.delete('/deleteInvoice/:receiptId', (req, res) => {
+router.delete('/delete/:receiptId', (req, res) => {
     const {
         receiptId,
     } = req.params;
