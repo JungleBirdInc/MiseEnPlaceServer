@@ -118,7 +118,7 @@ app.use('/inventory', inventory);
  *      WILL NOT update par levels, so make sure you update master if the items will be reordered
  * ROUTE: "Get ANY Inventory"
  *  REFACTOR REFACTOR REFACTOR (combine with other get inventories)
- *  ~ endpoint: /inventory/getInvent/:invId'
+ *  ~ endpoint: '/inventory/getInvent/:invId'
  *  ~ method: GET
  *  ~ gets an inventory by id number
  * ROUTE: "Get ALL Inventories"
@@ -133,14 +133,22 @@ app.use('/inventory', inventory);
 //*************************************************************************************** */
 app.use('/invoice', invoice);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Record an Invoice"
+ *  ~ endpoint: '/invoice/recordInvoice'
+ *  ~ method: POST
+ *  ~ records an incoming invoice
+ * ROUTE: "Get Any Invoice"
+ *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ method: GET
+ *  ~ get any invoice. Same route as get any inventory. 
+ * ROUTE: "Get All Invoices"
+ *  ~ endpoint: '/invoice/getAllInvoices/:orgId'
+ *  ~ method: GET
+ *  ~ gets all invoice records for a distributor
+ * ROUTE: "Delete an Invoice"
+ *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
+ *  ~ method: DELETE
+ *  ~ deletes the record of an invoice
 //*************************************************************************************** */
 app.use('/openBottles', openBottles);
 //*************************************************************************************** */
