@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Create Organization
 //**********************
-app.post('/api/createOrg', (req, res) => {
+app.post('/createOrg', (req, res) => {
     const {
         org_name,
         master_inventory,
@@ -39,7 +39,7 @@ app.post('/api/createOrg', (req, res) => {
 //**********************
 // Update Organization
 //**********************
-app.put('/api/updateOrg/:id', (req, res) => {
+app.put('/updateOrg/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -81,7 +81,7 @@ app.put('/api/updateOrg/:id', (req, res) => {
 //**********************
 // Delete Org
 //**********************
-app.delete('/api/deleteOrg/:id', (req, res) => {
+app.delete('/deleteOrg/:id', (req, res) => {
     const {
         id,
     } = req.params;

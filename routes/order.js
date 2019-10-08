@@ -6,9 +6,9 @@ const models = require('../app/models/db.js');
 //**********************
 // Place an Order
 //**********************
-app.post('api/placeOrder', (req, res) => {
+app.post('/placeOrder', (req, res) => {
     const {
-        admin_id,
+        admin_id, //this is the organization's id
         type,
         dist_id,
         rep_id,
@@ -38,7 +38,7 @@ app.post('api/placeOrder', (req, res) => {
             return log.id;
         })
         .then((result) => {
-            res.send('Weekly Logged');
+            res.send('Order Logged');
         })
         .catch((error) => {
             console.error(error);
@@ -55,7 +55,7 @@ app.post('api/placeOrder', (req, res) => {
 //**********************
 // Get All Orders
 //**********************
-app.get('/api/getAllOrders/:orgId', (req, res) => {
+app.get('/getAllOrders/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;

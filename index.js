@@ -171,25 +171,34 @@ app.use('/openBottles', openBottles);
 //*************************************************************************************** */
 app.use('/order', order);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Place an Order"
+    REFACTOR REFACTOR REFACTOR ( CURRENTLY DOES NOT PLACE THE ORDER )
+ *  ~ endpoint: 'order/placeOrder'
+ *  ~ method: POST
+ *  ~ records a new order
+ * ROUTE: "Get Any Order"
+ *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ method: GET
+ *  ~ same route as get any inventory
+ * ROUTE: "Get All Orders"
+ *  ~ endpoint: '/order/getAllOrders/:orgId'
+ *  ~ gets all order records for an organization
 //*************************************************************************************** */
 app.use('/organization', organization);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Create Organization"
+    REFACTOR REFACTOR REFACTOR (Should update user with orgId after creation)
+ *  ~ endpoint: '/organization/createOrg'
+ *  ~ method: POST
+ *  ~ creates an organization
+ * ROUTE: "Update Organization"
+ *  ~ endpoint: '/organization/updateOrg/:id'
+ *  ~ method: PUT
+ *  ~ updates the organization, selected by its id number
+ * ROUTE: "Delete an Organization"
+ *  ~ endpoint: '/organization/deleteOrg/:id'
+ *  ~ method: DELETE
+ *  ~ deletes an organization
 //*************************************************************************************** */
 app.use('/product', product);
 //*************************************************************************************** */
