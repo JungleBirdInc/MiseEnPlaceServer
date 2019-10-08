@@ -184,15 +184,15 @@ app.use('/organization', organization);
 //*************************************************************************************** */
 /* ROUTE: "Create Organization"
     REFACTOR REFACTOR REFACTOR (Should update user with orgId after creation)
- *  ~ endpoint: '/organization/createOrg'
+ *  ~ endpoint: '/organization/create'
  *  ~ method: POST
  *  ~ creates an organization
  * ROUTE: "Update Organization"
- *  ~ endpoint: '/organization/updateOrg/:id'
+ *  ~ endpoint: '/organization/update/:id'
  *  ~ method: PUT
  *  ~ updates the organization, selected by its id number
  * ROUTE: "Delete an Organization"
- *  ~ endpoint: '/organization/deleteOrg/:id'
+ *  ~ endpoint: '/organization/delete/:id'
  *  ~ method: DELETE
  *  ~ deletes an organization
 //*************************************************************************************** */
