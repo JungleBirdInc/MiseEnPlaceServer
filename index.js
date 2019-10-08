@@ -46,42 +46,42 @@ app.use(express.static(pathway));
 app.use('/user', user);
 //*************************************************************************************** */
 /* ROUTE: "Create User"
- *  ~ endpoint: 'user/createUser'
+ *  ~ endpoint: '/user/create'
  *  ~ method: POST
  *  ~ creates a user
  * ROUTE: "Update User"
- *  ~ endpoint: '/user/updateUser/:id'
+ *  ~ endpoint: '/user/update/:id'
  *  ~ method: PUT
  *  ~ updates a user
  * ROUTE: "Delete User"
- *  ~ endpoint: '/user/deleteUser/:id'
+ *  ~ endpoint: '/user/delete/:id'
  *  ~ method: DELETE
  *  ~ deletes a user
  * ROUTE: "Get All Users"
- * ~ endpoint: '/user/getAllUsers/:id'
+ * ~ endpoint: '/user/getAll/:id'
  * ~ method: GET
  * ~ gets all user for an organization
 //*************************************************************************************** */
 app.use('/distributor', distributor);
 //*************************************************************************************** */
 /* ROUTE: "Create Distributor"
- *  ~ endpoint: '/distributor/createDist'
+ *  ~ endpoint: '/distributor/create'
  *  ~ method: POST
  *  ~ creates a distributor
  * ROUTE: "Update Distributor"
- *  ~ endpoint: '/distributor/updateDist/:id'
+ *  ~ endpoint: '/distributor/update/:id'
  *  ~ method: PUT
  *  ~ updates a distributor
  * ROUTE: "Delete Distributor"
- *  ~ endpoint: '/distributor/deleteDist/:id'
+ *  ~ endpoint: '/distributor/delete/:id'
  *  ~ method: DELETE
  *  ~ deletes a distributor
  * ROUTE: "Get a Distributor"
- *  ~ endpoint: '/distributor/getDist/:distId'
+ *  ~ endpoint: '/distributor/getOne/:distId'
  *  ~ method: GET
  *  ~ gets an individual distributor by its id
  * ROUTE: "Get all Distributors"
- *  ~ endpoint: '/distributor/getAllDists/:orgId'
+ *  ~ endpoint: '/distributor/getAll/:orgId'
  *  ~ method: GET
  *  ~ gets all distributors for an organization by the organization's id
  * 
@@ -97,7 +97,7 @@ app.use('/inventory', inventory);
  *      to reflect that assignment
  * ROUTE: "Get Master Inventory"
  *  REFACTOR REFACTOR REFACTOR (combine with other get inventories)
- *  ~ endpoint: ''/inventory/getMaster/:orgId''
+ *  ~ endpoint: '/inventory/getMaster/:orgId'
  *  ~ method: GET
  *  ~ retrieves the master par list for an organization
  * ROUTE: "Update Master Inventory"
@@ -118,35 +118,35 @@ app.use('/inventory', inventory);
  *      WILL NOT update par levels, so make sure you update master if the items will be reordered
  * ROUTE: "Get ANY Inventory"
  *  REFACTOR REFACTOR REFACTOR (combine with other get inventories)
- *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ endpoint: '/inventory/getOne/:invId'
  *  ~ method: GET
  *  ~ gets an inventory by id number
  * ROUTE: "Get ALL Inventories"
- *  ~ endpoint: '/inventory/getAllInvents/:orgId'
+ *  ~ endpoint: '/inventory/getAll/:orgId'
  *  ~ method: GET
  *  ~ gets all relevant inventories for an account, including master and current.
  *       DO NOT display master and current as logs. Remove them from the array before populating lists
  * ROUTE: "Make a Weekly Log"
- *  ~ endpoint: '/inventory/makeWeekly''
+ *  ~ endpoint: '/inventory/makeWeekly'
  *  ~ method: POST
  *  ~ takes the current inventory levels, and makes a record of them. 
 //*************************************************************************************** */
 app.use('/invoice', invoice);
 //*************************************************************************************** */
 /* ROUTE: "Record an Invoice"
- *  ~ endpoint: '/invoice/recordInvoice'
+ *  ~ endpoint: '/invoice/record'
  *  ~ method: POST
  *  ~ records an incoming invoice
  * ROUTE: "Get Any Invoice"
- *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ endpoint: '/invoice/getOne/:invId'
  *  ~ method: GET
  *  ~ get any invoice. Same route as get any inventory. 
  * ROUTE: "Get All Invoices"
- *  ~ endpoint: '/invoice/getAllInvoices/:orgId'
+ *  ~ endpoint: '/invoice/getAll/:orgId'
  *  ~ method: GET
  *  ~ gets all invoice records for a distributor
  * ROUTE: "Delete an Invoice"
- *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
+ *  ~ endpoint: '/invoice/delete/:receiptId'
  *  ~ method: DELETE
  *  ~ deletes the record of an invoice
 //*************************************************************************************** */
@@ -157,46 +157,42 @@ app.use('/openBottles', openBottles);
  *  ~ method: PUT
  *  ~ records the new weights of open bottles. New entries will be created if a bottle isnt found
  * ROUTE: "Get All Open Bottles"
- *  ~ endpoint: '/openBottles/getAllBottles/:orgId'
+ *  ~ endpoint: '/openBottles/getAll/:orgId'
  *  ~ method: GET
  *  ~ get all open bottles for an organization. 
  * ROUTE: "Delete a Bottle"
- *  ~ endpoint: '/openBottles/deleteBottle/:bottleId'
+ *  ~ endpoint: '/openBottles/delete/:bottleId'
  *  ~ method: GET
  *  ~ gets all invoice records for a distributor
- * ROUTE: "Delete an Invoice"
- *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
- *  ~ method: DELETE
- *  ~ deletes the record of an invoice
 //*************************************************************************************** */
 app.use('/order', order);
 //*************************************************************************************** */
 /* ROUTE: "Place an Order"
     REFACTOR REFACTOR REFACTOR ( CURRENTLY DOES NOT PLACE THE ORDER )
- *  ~ endpoint: 'order/placeOrder'
+ *  ~ endpoint: 'order/send'
  *  ~ method: POST
  *  ~ records a new order
  * ROUTE: "Get Any Order"
- *  ~ endpoint: '/inventory/getInvent/:invId'
+ *  ~ endpoint: '/order/getOne/:invId'
  *  ~ method: GET
  *  ~ same route as get any inventory
  * ROUTE: "Get All Orders"
- *  ~ endpoint: '/order/getAllOrders/:orgId'
+ *  ~ endpoint: '/order/getAll/:orgId'
  *  ~ gets all order records for an organization
 //*************************************************************************************** */
 app.use('/organization', organization);
 //*************************************************************************************** */
 /* ROUTE: "Create Organization"
     REFACTOR REFACTOR REFACTOR (Should update user with orgId after creation)
- *  ~ endpoint: '/organization/createOrg'
+ *  ~ endpoint: '/organization/create'
  *  ~ method: POST
  *  ~ creates an organization
  * ROUTE: "Update Organization"
- *  ~ endpoint: '/organization/updateOrg/:id'
+ *  ~ endpoint: '/organization/update/:id'
  *  ~ method: PUT
  *  ~ updates the organization, selected by its id number
  * ROUTE: "Delete an Organization"
- *  ~ endpoint: '/organization/deleteOrg/:id'
+ *  ~ endpoint: '/organization/delete/:id'
  *  ~ method: DELETE
  *  ~ deletes an organization
 //*************************************************************************************** */
@@ -204,32 +200,36 @@ app.use('/product', product);
 //*************************************************************************************** */
 /* ROUTE: "Create a Product"
     REFACTOR REFACTOR REFACTOR ( This needs to be an upsert )
- *  ~ endpoint: '/product/createProduct'
+ *  ~ endpoint: '/product/create'
  *  ~ method: POST
- *  ~ 
- * ROUTE: "Get All Open Bottles"
- *  ~ endpoint: '/openBottles/getAllBottles/:orgId'
+ *  ~ creates a new Product. searches by UPC code and selects that product if it already exists
+ * ROUTE: "Get A Distributor Product"
+ *  ~ endpoint: '/product/getOne/:id'
  *  ~ method: GET
- *  ~ get all open bottles for an organization.
- * ROUTE: "Delete a Bottle"
- *  ~ endpoint: '/openBottles/deleteBottle/:bottleId'
+ *  ~ gets a product from a distributor list by the product's id
+ * ROUTE: "Get ALL Distributor Products"
+ *  ~ endpoint: '/product/getAll/:id'
  *  ~ method: GET
- *  ~ gets all invoice records for a distributor
- * ROUTE: "Delete an Invoice"
- *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
- *  ~ method: DELETE
- *  ~ deletes the record of an invoice
+ *  ~ gets all products for a distributor by the distributor id
 //*************************************************************************************** */
 app.use('/reps', reps);
 //*************************************************************************************** */
-/*
- *
- *
- *
- *
- *
- *
- *
+/* ROUTE: "Create a Rep"
+ *  ~ endpoint: '/reps/create'
+ *  ~ method: POST
+ *  ~ creates a rep
+ * ROUTE: "Update Rep"
+ *  ~ endpoint: '/reps/update/:id'
+ *  ~ method: PUT
+ *  ~ updates a reps information
+ * ROUTE: "Delete an Organization"
+ *  ~ endpoint: '/reps/delete/:id'
+ *  ~ method: DELETE
+ *  ~ deletes a rep
+ * ROUTE: "Get All Reps"
+ *  ~ endpoint: '/reps/getAll/:id'
+ *  ~ method: GET
+ *  ~ gets all reps from a distributor by it's id
 //*************************************************************************************** */
 app.use('/forecasting', forecasting);
 //*************************************************************************************** */
@@ -242,6 +242,12 @@ app.use('/forecasting', forecasting);
  *
  *
 */
+
+
+
+
+
+
 //**********************
 // Create User
 //**********************

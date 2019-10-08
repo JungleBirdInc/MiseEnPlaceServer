@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Place an Order
 //**********************
-router.post('/placeOrder', (req, res) => {
+router.post('/send', (req, res) => {
     const {
         admin_id, //this is the organization's id
         type,
@@ -55,7 +55,7 @@ router.post('/placeOrder', (req, res) => {
 //**********************
 // Get All Orders
 //**********************
-router.get('/getAllOrders/:orgId', (req, res) => {
+router.get('/getAll/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;

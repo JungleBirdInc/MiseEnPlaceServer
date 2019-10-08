@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Create User
 //**********************
-router.post('/createUser', (req, res) => {
+router.post('/create', (req, res) => {
     const {
         role_id,
         first_name,
@@ -35,7 +35,7 @@ router.post('/createUser', (req, res) => {
 //**********************
 // Update User
 //**********************
-router.put('/updateUser/:id', (req, res) => {
+router.put('/update/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -73,7 +73,7 @@ router.put('/updateUser/:id', (req, res) => {
 //**********************
 // Delete User
 //**********************
-router.delete('/deleteUser/:id', (req, res) => {
+router.delete('/delete/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -96,7 +96,7 @@ router.delete('/deleteUser/:id', (req, res) => {
 //***********************************
 // Get ALL Users of an Organization
 //***********************************
-router.get('/getAllUsers/:id', (req, res) => {
+router.get('/getAll/:id', (req, res) => {
     const {
         id,
     } = req.params;

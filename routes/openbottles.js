@@ -36,7 +36,7 @@ router.put('/newWeights/:orgId', (req, res) => {
 //**********************
 // Get All Open Bottles
 //**********************
-router.get('/getAllBottles/:orgId', (req, res) => {
+router.get('/getAll/:orgId', (req, res) => {
     const {
         orgId
     } = req.params;
@@ -63,7 +63,7 @@ router.get('/getAllBottles/:orgId', (req, res) => {
 //**********************
 // Delete a Bottle
 //**********************
-router.delete('/deleteBottle/:bottleId', (req, res) => {
+router.delete('/delete/:bottleId', (req, res) => {
     const {
         bottleId,
     } = req.params;
