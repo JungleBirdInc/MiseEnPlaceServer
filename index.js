@@ -236,16 +236,16 @@ app.use('/categories', categories);
 //*************************************************************************************** */
 /* ROUTE: "Get All Categories"
  *  ~ endpoint: '/categories/categories'
- *  ~ method: POST
- *  ~ creates a rep
+ *  ~ method: GET
+ *  ~ gets all categories
  * ROUTE: "Get All Subcategories"
  *  ~ endpoint: '/categories/subcategories'
- *  ~ method: PUT
- *  ~ updates a reps information
- *
- *
- *
- *
+ *  ~ method: GET
+ *  ~ gets all subcategories
+ * ROUTE: "Get All Bottle Sizes"
+ *  ~ endpoint: '/categories/bottlesizes'
+ *  ~ method: GET
+ *  ~ gets all valid bottle sizes
 */
 //*************************************************************************************** */
 app.use('/forecasting', forecasting);
