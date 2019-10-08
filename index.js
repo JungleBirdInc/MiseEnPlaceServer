@@ -17,6 +17,7 @@ const order = require('./routes/order.js');
 const organization = require('./routes/organization.js');
 const product = require('./routes/product.js');
 const reps = require('./routes/reps.js');
+const categories = require('./routes/categories.js');
 const forecasting = require('./routes/forecasting.js');
 
 const app = express();
@@ -230,6 +231,18 @@ app.use('/reps', reps);
  *  ~ endpoint: '/reps/getAll/:id'
  *  ~ method: GET
  *  ~ gets all reps from a distributor by it's id
+ * //*************************************************************************************** */
+app.use('/categories', categories);
+//*************************************************************************************** */
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+*/
 //*************************************************************************************** */
 app.use('/forecasting', forecasting);
 //*************************************************************************************** */
