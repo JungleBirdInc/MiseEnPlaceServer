@@ -34,5 +34,18 @@ router.get('/subcategories', (req, res) => {
             res.status(500).json(error);
         })
 });
+//***************************
+// Get All Bottle Sizes
+//***************************
+router.get('/bottlesizes', (req, res) => {
+    models.BtlSize.findAll()
+        .then((bottlesizes) => {
+            res.status(200).json(bottlesizes);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).json(error);
+        })
+});
 
 module.exports = router;
