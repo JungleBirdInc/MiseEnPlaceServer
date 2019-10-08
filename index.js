@@ -134,7 +134,7 @@ app.use('/inventory', inventory);
 app.use('/invoice', invoice);
 //*************************************************************************************** */
 /* ROUTE: "Record an Invoice"
- *  ~ endpoint: '/invoice/recordInvoice'
+ *  ~ endpoint: '/invoice/record'
  *  ~ method: POST
  *  ~ records an incoming invoice
  * ROUTE: "Get Any Invoice"
@@ -142,11 +142,11 @@ app.use('/invoice', invoice);
  *  ~ method: GET
  *  ~ get any invoice. Same route as get any inventory. 
  * ROUTE: "Get All Invoices"
- *  ~ endpoint: '/invoice/getAllInvoices/:orgId'
+ *  ~ endpoint: '/invoice/getAll/:orgId'
  *  ~ method: GET
  *  ~ gets all invoice records for a distributor
  * ROUTE: "Delete an Invoice"
- *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
+ *  ~ endpoint: '/invoice/delete/:receiptId'
  *  ~ method: DELETE
  *  ~ deletes the record of an invoice
 //*************************************************************************************** */
@@ -157,17 +157,13 @@ app.use('/openBottles', openBottles);
  *  ~ method: PUT
  *  ~ records the new weights of open bottles. New entries will be created if a bottle isnt found
  * ROUTE: "Get All Open Bottles"
- *  ~ endpoint: '/openBottles/getAllBottles/:orgId'
+ *  ~ endpoint: '/openBottles/getAll/:orgId'
  *  ~ method: GET
  *  ~ get all open bottles for an organization. 
  * ROUTE: "Delete a Bottle"
- *  ~ endpoint: '/openBottles/deleteBottle/:bottleId'
+ *  ~ endpoint: '/openBottles/delete/:bottleId'
  *  ~ method: GET
  *  ~ gets all invoice records for a distributor
- * ROUTE: "Delete an Invoice"
- *  ~ endpoint: '/invoice/deleteInvoice/:receiptId'
- *  ~ method: DELETE
- *  ~ deletes the record of an invoice
 //*************************************************************************************** */
 app.use('/order', order);
 //*************************************************************************************** */
