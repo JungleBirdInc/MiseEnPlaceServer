@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Initialize Inventory
 //**********************
-app.post('/initialize', (req, res) => {
+router.post('/initialize', (req, res) => {
     const {
         admin_id,
         type,
@@ -112,7 +112,7 @@ app.post('/initialize', (req, res) => {
 //**********************
 // Get Master Inventory
 //**********************
-app.get('/getMaster/:orgId', (req, res) => {
+router.get('/getMaster/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;
@@ -146,7 +146,7 @@ app.get('/getMaster/:orgId', (req, res) => {
 //*************************
 // Update Master Inventory
 //*************************
-app.put('/api/updateMaster/:masterId', (req, res) => {
+router.put('/api/updateMaster/:masterId', (req, res) => {
     const {
         masterId,
     } = req.params;
@@ -175,7 +175,7 @@ app.put('/api/updateMaster/:masterId', (req, res) => {
 //**********************
 // Get Current Inventory
 //**********************
-app.get('/getCurrent/:orgId', (req, res) => {
+router.get('/getCurrent/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;
@@ -206,7 +206,7 @@ app.get('/getCurrent/:orgId', (req, res) => {
 //**************************
 // Update Current Inventory
 //**************************
-app.put('/updateCurrent/:currentId', (req, res) => {
+router.put('/updateCurrent/:currentId', (req, res) => {
     const {
         currentId,
     } = req.params;
@@ -234,7 +234,7 @@ app.put('/updateCurrent/:currentId', (req, res) => {
 //**********************
 // Get Any Inventory
 //**********************
-app.get('/api/getInvent/:invId', (req, res) => {
+router.get('/api/getInvent/:invId', (req, res) => {
     const {
         invId,
     } = req.params;
@@ -264,7 +264,7 @@ app.get('/api/getInvent/:invId', (req, res) => {
 //**********************
 // Get All Inventories
 //**********************
-app.get('/getAllInvents/:orgId', (req, res) => {
+router.get('/getAllInvents/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;
@@ -295,7 +295,7 @@ app.get('/getAllInvents/:orgId', (req, res) => {
 //**********************
 // Make a Weekly Log
 //**********************
-app.post('/makeWeekly', (req, res) => {
+router.post('/makeWeekly', (req, res) => {
     const {
         admin_id,
         type,
