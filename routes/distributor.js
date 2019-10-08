@@ -6,7 +6,7 @@ const models = require('../app/models/db.js');
 //**********************
 // Create Distributor
 //**********************
-app.post('/api/createDist', (req, res) => {
+app.post('/createDist', (req, res) => {
     const {
         orgId,
         name,
@@ -80,7 +80,7 @@ app.post('/api/createDist', (req, res) => {
 //**********************
 // Update Distributor
 //**********************
-app.put('/api/updateDist/:id', (req, res) => {
+app.put('/updateDist/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -120,7 +120,7 @@ app.put('/api/updateDist/:id', (req, res) => {
 //**********************
 // Delete Distributor
 //**********************
-app.delete('/api/deleteDist/:id', (req, res) => {
+app.delete('/deleteDist/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -143,7 +143,7 @@ app.delete('/api/deleteDist/:id', (req, res) => {
 //**********************
 // Get A Distributor
 //**********************
-app.get('/api/getDist/:distId', (req, res) => {
+app.get('/getDist/:distId', (req, res) => {
     const {
         distId,
     } = req.params;
@@ -167,7 +167,7 @@ app.get('/api/getDist/:distId', (req, res) => {
 //**********************
 // Get All Distributors
 //**********************
-app.get('/api/getAllDists/:orgId', (req, res) => {
+app.get('/getAllDists/:orgId', (req, res) => {
     const {
         orgId,
     } = req.params;
