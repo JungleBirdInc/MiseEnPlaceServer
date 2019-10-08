@@ -46,42 +46,42 @@ app.use(express.static(pathway));
 app.use('/user', user);
 //*************************************************************************************** */
 /* ROUTE: "Create User"
- *  ~ endpoint: 'user/createUser'
+ *  ~ endpoint: '/user/create'
  *  ~ method: POST
  *  ~ creates a user
  * ROUTE: "Update User"
- *  ~ endpoint: '/user/updateUser/:id'
+ *  ~ endpoint: '/user/update/:id'
  *  ~ method: PUT
  *  ~ updates a user
  * ROUTE: "Delete User"
- *  ~ endpoint: '/user/deleteUser/:id'
+ *  ~ endpoint: '/user/delete/:id'
  *  ~ method: DELETE
  *  ~ deletes a user
  * ROUTE: "Get All Users"
- * ~ endpoint: '/user/getAllUsers/:id'
+ * ~ endpoint: '/user/getAll/:id'
  * ~ method: GET
  * ~ gets all user for an organization
 //*************************************************************************************** */
 app.use('/distributor', distributor);
 //*************************************************************************************** */
 /* ROUTE: "Create Distributor"
- *  ~ endpoint: '/distributor/createDist'
+ *  ~ endpoint: '/distributor/create'
  *  ~ method: POST
  *  ~ creates a distributor
  * ROUTE: "Update Distributor"
- *  ~ endpoint: '/distributor/updateDist/:id'
+ *  ~ endpoint: '/distributor/update/:id'
  *  ~ method: PUT
  *  ~ updates a distributor
  * ROUTE: "Delete Distributor"
- *  ~ endpoint: '/distributor/deleteDist/:id'
+ *  ~ endpoint: '/distributor/delete/:id'
  *  ~ method: DELETE
  *  ~ deletes a distributor
  * ROUTE: "Get a Distributor"
- *  ~ endpoint: '/distributor/getDist/:distId'
+ *  ~ endpoint: '/distributor/getOne/:distId'
  *  ~ method: GET
  *  ~ gets an individual distributor by its id
  * ROUTE: "Get all Distributors"
- *  ~ endpoint: '/distributor/getAllDists/:orgId'
+ *  ~ endpoint: '/distributor/getAll/:orgId'
  *  ~ method: GET
  *  ~ gets all distributors for an organization by the organization's id
  * 
