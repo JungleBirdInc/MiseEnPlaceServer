@@ -35,7 +35,7 @@ router.post('/createUser', (req, res) => {
 //**********************
 // Update User
 //**********************
-app.put('/api/updateUser/:id', (req, res) => {
+app.put('/updateUser/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -73,7 +73,7 @@ app.put('/api/updateUser/:id', (req, res) => {
 //**********************
 // Delete User
 //**********************
-app.delete('/api/deleteUser/:id', (req, res) => {
+app.delete('/deleteUser/:id', (req, res) => {
     const {
         id,
     } = req.params;
@@ -96,7 +96,7 @@ app.delete('/api/deleteUser/:id', (req, res) => {
 //***********************************
 // Get ALL Users of an Organization
 //***********************************
-app.get('/api/getAllUsers/:id', (req, res) => {
+app.get('/getAllUsers/:id', (req, res) => {
     const {
         id,
     } = req.params;
