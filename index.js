@@ -20,6 +20,7 @@ const product = require('./routes/product.js');
 const reps = require('./routes/reps.js');
 const categories = require('./routes/categories.js');
 const forecasting = require('./routes/forecasting.js');
+const scan = require('./routes/scan.js');
 
 const sample = require('./sample.js');
 
@@ -263,6 +264,8 @@ app.use('/forecasting', forecasting);
  *
 */
 
+app.use('/scan', scan);
+
 let regions = sample.regions;
 let bibby = regions[0].lines;
 let hose = [];
@@ -280,7 +283,7 @@ hose.forEach((array) => {
     })
     text.push(bubble.join(' '));
 })
-console.log(text);
+// console.log(text);
 
 var options = {
     shouldSort: true,
@@ -295,7 +298,7 @@ var options = {
 };
 
 let fuse = new Fuse(text, options);
-console.log(fuse.search('Republic'));
+// console.log(fuse.search('Republic'));
 
 // console.log(spiel);
 
