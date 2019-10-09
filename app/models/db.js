@@ -46,7 +46,7 @@ const BtlSize = sequelize.define('btl_size', {
         field: 'updated_at',
         type: Sequelize.DATE,
         allowNull: true,
-    },
+    },    
 }, {
     freezeTableName: true,
     timeStamps: false,
