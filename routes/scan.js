@@ -21,7 +21,9 @@ router.post('/photo', (req, res) => {
     const options = {
         url,
     }   
-    const bestGuess = {};
+    const bestGuess = {
+        matches: [],
+    };
     
     axios.post(CV_REQUEST, options)
     .then((vision) => {
@@ -48,6 +50,28 @@ router.post('/photo', (req, res) => {
     })
     .then((text) => {
         //get distributors from database for this org
+        models.DistOrgs.findAll({
+            where: {
+                org_id: orgId,
+            },
+            include: [{
+                model: models.Distributors,
+            }]
+        })
+        .then((distributors) => {
+            let fuse = new Fuse(text, options);
+            distributors.forEach((distributor) => {
+                let name = distributor.distributor.name;
+                let searched = fuse.search(name);
+                if (searched[0] <= 0.5){
+                    bestGuess.matches.push({
+                        name: name,
+                        score: searched[0].score,
+                        line: searched[0].matches[0].value,
+                    })
+                }
+            })
+        })
         //search text for each distributor
         //add best result to bestGuess object!
         //keep going!
