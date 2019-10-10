@@ -726,6 +726,9 @@ Subcategories.belongsTo(Categories);
 BtlSize.hasMany(Products);
 Products.belongsTo(BtlSize);
 
+Distributors.hasMany(DistributorsProducts);
+DistributorsProducts.belongsTo(Distributors);
+
 
 
 

@@ -18,18 +18,34 @@ router.post('/photo', (req, res) => {
         orgId,
         url,
     } = req.body;
-    const options = {
+
+    const requestUrl = {
         url,
     }   
     const bestGuess = {
         matches: [],
+        products: [],
     };
+
+    const text = [];
     
-    axios.post(CV_REQUEST, options)
+    const options = {
+        shouldSort: true,
+        tokenize: true,
+        includeScore: true,
+        includeMatches: true,
+        threshold: 0.6,
+        location: 0,
+        distance: 100,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+    };
+    // let fuse = new Fuse(text, options);
+    
+    axios.post(CV_REQUEST, requestUrl)
     .then((vision) => {
         let regions = vision.data.regions;
         let unsortedText = [];
-        let text = [];
         regions.forEach((region) => {
             unsortedText.push(region.lines);
         })
@@ -45,12 +61,12 @@ router.post('/photo', (req, res) => {
             })
             text.push(bubble.join(' '));
         })
-        console.log('text \n\n', text);
+        // console.log('text \n\n', text);
         return text;
     })
     .then((text) => {
         //get distributors from database for this org
-        models.DistOrgs.findAll({
+        return models.DistOrgs.findAll({
             where: {
                 org_id: orgId,
             },
@@ -58,29 +74,42 @@ router.post('/photo', (req, res) => {
                 model: models.Distributors,
             }]
         })
-        .then((distributors) => {
-            let fuse = new Fuse(text, options);
-            distributors.forEach((distributor) => {
-                let name = distributor.distributor.name;
-                let searched = fuse.search(name);
-                if (searched[0] <= 0.5){
-                    bestGuess.matches.push({
-                        name: name,
-                        score: searched[0].score,
-                        line: searched[0].matches[0].value,
-                    })
-                }
-            })
+    })
+    .then((distributors) => {
+        let fuse = new Fuse(text, options);
+        distributors.forEach((distributor) => {
+            let name = distributor.distributor.name;
+            let searched = fuse.search(name);
+            if (searched[0].score <= 0.5){
+                bestGuess.matches.push({
+                    name: name,
+                    score: searched[0].score,
+                    line: searched[0].matches[0].value,
+                })
+            }
         })
-        //search text for each distributor
-        //add best result to bestGuess object!
-        //keep going!
+        // console.log(bestGuess);
     })
     .then((text) => {
-        //get all the products from the best guess distributor
-        //search text for each product
-        //if the product returns by an acceptable margin, push it
-        //how do we figure out quantity?? is there a way? google it. 
+        console.log('start search');
+        console.log(bestGuess);
+        return models.Distributors.findOne({
+            where: {
+                name: bestGuess.matches[0].name,
+            },
+            include: [{
+                model: models.DistributorsProducts,
+                include: [{
+                    model: models.Products,
+                    include: [{
+                        model: models.Subcategories,
+                        include: [{
+                            model: models.Categories,
+                        }]
+                    }]
+                }]
+            }]
+        })
     })
     .then((whatever) => {
         console.log(whatever);
@@ -91,42 +120,6 @@ router.post('/photo', (req, res) => {
         res.status(500).send('boooooooo')
     });
     
-
-    let regions = sample.regions;
-    let bibby = regions[0].lines;
-    let hose = [];
-    let text = [];
-    sample.regions.forEach((region) => {
-        hose.push(region.lines);
-    })
-    hose.forEach((array) => {
-        let bubble = [];
-        array.forEach((line) => {
-            let words = line.words;
-            words.forEach((word) => {
-                bubble.push(word.text);
-            })
-        })
-        text.push(bubble.join(' '));
-    })
-    // console.log(text);
-
-    // let options = {
-    //     shouldSort: true,
-    //     tokenize: true,
-    //     includeScore: true,
-    //     includeMatches: true,
-    //     threshold: 0.6,
-    //     location: 0,
-    //     distance: 100,
-    //     maxPatternLength: 32,
-    //     minMatchCharLength: 1,
-    // };
-
-    let fuse = new Fuse(text, options);
-    // console.log(fuse.search('Republic'));
-
-// console.log(spiel);
 
 
 })
