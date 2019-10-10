@@ -91,8 +91,8 @@ router.post('/photo', (req, res) => {
         // console.log(bestGuess);
     })
     .then((text) => {
-        console.log('start search');
-        console.log(bestGuess);
+        // console.log('start search');
+        // console.log(bestGuess);
         return models.Distributors.findOne({
             where: {
                 name: bestGuess.matches[0].name,
@@ -111,9 +111,47 @@ router.post('/photo', (req, res) => {
             }]
         })
     })
-    .then((whatever) => {
-        console.log(whatever);
-        res.status(200).send('whooooooo')
+    .then((allProds) => {
+        let products = allProds.distributors_products;
+        
+        let textBreak = [...text];
+        let textBreak2 = [...text];
+        let fuse = new Fuse(textBreak2, options);
+        textBreak.forEach((block) => {
+            if (block.toLowerCase().match(/(?<=50|100|200|375|500|750|1000|1750)m.\s/)) {
+                // console.log('\n\n\n\n bongo \n\n\n\n');
+                let split = block.split(/(?<=50|100|200|375|500|750|1000|1750)m.\s/i);
+                // console.log(split);
+                for(let i = 0; i < split.length; i++){
+                    textBreak2.push(split[i]);
+                }
+            }
+        })
+        products.forEach((product) => {
+            let bubble = {
+                guesses: [],
+            }
+            // console.log(textBreak2);
+            let name = product.product.product_name;
+            let searched = fuse.search(name);
+            for (let i = 0; i < 4; i++){
+                if (searched[i].score <= 0.7) {
+                    bubble.guesses.push({
+                        name,
+                        product,
+                        score: searched[i].score,
+                        line: searched[i]
+                    });
+                }
+            }
+            bestGuess.products.push(bubble);
+        })
+        console.log(bestGuess);
+        return bestGuess;
+    })
+    .then((bestGuess) => {
+
+        res.status(200).json(bestGuess);
     })
     .catch((error) => {
         console.log(error);

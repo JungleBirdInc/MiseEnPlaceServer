@@ -298,7 +298,7 @@ var options = {
 };
 
 let fuse = new Fuse(text, options);
-console.log(fuse.search('Lirette Selections'));
+// console.log(fuse.search('Lirette Selections'));
 
 // console.log(spiel);
 

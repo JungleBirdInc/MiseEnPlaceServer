@@ -205,6 +205,11 @@ const DistributorsProducts = sequelize.define('distributors_products', {
         type: Sequelize.INTEGER,
         allowNull: true,
     },
+    distributorOrganizationId: {
+        field: 'dist_id',
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
     productId: {
         field: 'product_id',
         type: Sequelize.INTEGER,
