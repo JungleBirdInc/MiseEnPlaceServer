@@ -137,11 +137,12 @@ const Distributors = sequelize.define('distributors', {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+        allowNull: false,
     },
     distributorOrganizationId: {
         field: 'id',
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
     },
     name: {
         type: Sequelize.STRING,
