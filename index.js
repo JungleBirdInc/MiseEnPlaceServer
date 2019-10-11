@@ -6,6 +6,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const moment = require('moment');
+const Fuse = require('fuse.js');
 
 const models = require('./app/models/db.js');
 const user = require('./routes/user.js');
@@ -19,6 +20,9 @@ const product = require('./routes/product.js');
 const reps = require('./routes/reps.js');
 const categories = require('./routes/categories.js');
 const forecasting = require('./routes/forecasting.js');
+const scan = require('./routes/scan.js');
+
+const sample = require('./sample.js');
 
 const app = express();
 const router = express.Router();
@@ -260,6 +264,43 @@ app.use('/forecasting', forecasting);
  *
 */
 
+app.use('/scan', scan);
+
+let regions = sample.regions;
+let bibby = regions[0].lines;
+let hose = [];
+let text = [];
+sample.regions.forEach((region) => {
+    hose.push(region.lines);
+})
+hose.forEach((array) => {
+    let bubble = [];
+    array.forEach((line) => {
+        let words = line.words;
+        words.forEach((word) => {
+            bubble.push(word.text);
+        })
+    })
+    text.push(bubble.join(' '));
+})
+// console.log(text);
+
+var options = {
+    shouldSort: true,
+    tokenize: true,
+    includeScore: true,
+    includeMatches: true,
+    threshold: 0.6,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+};
+
+let fuse = new Fuse(text, options);
+// console.log(fuse.search('Lirette Selections'));
+
+// console.log(spiel);
 
 
 

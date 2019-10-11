@@ -19,7 +19,8 @@ router.post('/create', (req, res) => {
     } = req.body;
     //distributor doesn't already exist
     const createDist = () => {
-        models.Distributors.create({
+        console.log('hello');
+        models.Distributors.upsert({
             name,
             address,
             city,
@@ -30,8 +31,8 @@ router.post('/create', (req, res) => {
         })
             .then((dist) => {
                 models.DistOrgs.create({
-                    dist_id: dist.id,
-                    org_id: orgId,
+                    distributorOrganizationId: dist.id,
+                    organizationId: orgId,
                 });
             })
             .then(() => {
@@ -45,8 +46,8 @@ router.post('/create', (req, res) => {
     const addDist = (dist) => {
         console.log(dist);
         models.DistOrgs.create({
-            dist_id: dist.organizationId,
-            org_id: orgId,
+            distributorOrganizationId: dist.organizationId,
+            organizationId: orgId,
         })
             .then(() => {
                 console.log('Successfully ADDED!');

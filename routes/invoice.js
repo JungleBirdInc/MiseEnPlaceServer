@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const Fuse = require('fuse.js');
+require('dotenv').config();
 
 const models = require('../app/models/db.js');
 
@@ -13,6 +15,7 @@ router.post('/record', (req, res) => {
         dist_id,
         rep_id,
         total_price,
+        url,
         receiptSet, //an array with inventory objects for current inventory level
     } = req.body;
 
@@ -104,6 +107,7 @@ router.delete('/delete/:receiptId', (req, res) => {
             res.status(500).send(error);
         });
 });
+
 
 
 module.exports = router;
