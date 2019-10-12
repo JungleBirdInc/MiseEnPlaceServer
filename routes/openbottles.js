@@ -61,6 +61,39 @@ router.get('/getAll/:orgId', (req, res) => {
 })
 
 //**********************
+// Get a Bottle
+//**********************
+router.get('/:upc', (req, res) => {
+    const {
+        upc,
+    } = req.params;
+    models.Products.findOne({
+        where: {
+            upc,
+        }
+    })
+    .then((bottle) => {
+    return models.OpenBottles.findOne({
+        where: {
+            product_name: bottle.product_name,
+        },
+        include: [{
+            model: models.DistributorsProducts,
+            include: [{
+                model: models.Products,
+            }]
+        }],
+    })
+    })
+    .then((openBottle) => {
+        res.status(200).json(openBottle);
+    })
+    .catch((error) => {
+        res.status(500).send(error);
+    })
+})
+
+//**********************
 // Delete a Bottle
 //**********************
 router.delete('/delete/:bottleId', (req, res) => {
