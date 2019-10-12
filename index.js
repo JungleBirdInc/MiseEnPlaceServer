@@ -39,7 +39,7 @@ app.use(session({
 // date: models.sequelize.literal('CURRENT_TIMESTAMP'),
 
 // Variable that syncs up our two repo paths
-const pathway = path.join(__dirname, '../miseenplace/src/index.html');
+const pathway = path.join(__dirname, '../miseenplace/dist/MiseEnPlace');
 
 // serve static files
 app.use(express.static(pathway));
