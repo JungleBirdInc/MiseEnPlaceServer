@@ -94,6 +94,36 @@ router.get('/:upc', (req, res) => {
 })
 
 //**********************
+// Update a Bottle
+//**********************
+router.put(('/weight/:bottleId', (req, res) => {
+    const {
+        bottleId,
+    } = req.params;
+    const {
+        weight,
+    } = req.body;
+    models.OpenBottles.findOne({
+        where: {
+            id: bottleId,
+        }
+    })
+    .then((bottle) => {
+        return models.OpenBottles.update({
+            id: bottle.id,
+            weight: weight,
+        })
+    })
+    .then((updatedBottle) => {
+        res.status(200).json(updatedBottle);
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send(error);
+    })
+}))
+
+//**********************
 // Delete a Bottle
 //**********************
 router.delete('/delete/:bottleId', (req, res) => {
