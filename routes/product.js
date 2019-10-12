@@ -37,12 +37,12 @@ router.post('/create', (req, res) => {
         .then((product) => {
             models.DistributorsProducts.findOrCreate({
                 where: {
-                    products_id: product[0].id,
+                    productId: product[0].id,
                 },
                 defaults: {
                     dist_id,
                     price,
-                    products_id: product[0].id,
+                    productId: product[0].id,
 
                 }
             })
