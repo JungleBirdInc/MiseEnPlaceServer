@@ -37,6 +37,16 @@ const BtlSize = sequelize.define('btl_size', {
         type: Sequelize.STRING,
         allowNull: true,
     },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },    
 }, {
     freezeTableName: true,
     timeStamps: false,
@@ -54,6 +64,16 @@ const Categories = sequelize.define('categories', {
     },
     category_name: {
         type: Sequelize.STRING,
+        allowNull: true,
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
         allowNull: true,
     },
 }, {
@@ -117,11 +137,12 @@ const Distributors = sequelize.define('distributors', {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+        allowNull: false,
     },
     distributorOrganizationId: {
         field: 'id',
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
     },
     name: {
         type: Sequelize.STRING,
@@ -182,6 +203,11 @@ const DistributorsProducts = sequelize.define('distributors_products', {
         primaryKey: true,
     },
     dist_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    distributorOrganizationId: {
+        field: 'dist_id',
         type: Sequelize.INTEGER,
         allowNull: true,
     },
@@ -466,14 +492,30 @@ const Products = sequelize.define('products', {
     },
     category_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
+    },
+    categoryId: {
+        field: 'category_id',
+        type: Sequelize.INTEGER,
+        allowNull: true,
     },
     sub_category_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
     },
-    size: {
+    subcategoryId: {
+        field: 'sub_category_id',
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    btlSizeId: {
+        field: 'size',
         type: Sequelize.STRING,
+        allowNull: true,
+    },
+    btlSizeId: {
+        field: 'size',
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
     notes: {
@@ -582,10 +624,25 @@ const Subcategories = sequelize.define('subcategories', {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    categoryId: {
+        field: 'category_id',
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
     subcategory_name: {
         type: Sequelize.STRING,
         allowNull: false,
-    }
+    },
+    createdAt: {
+        field: 'created_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
 }, {
     freezeTableName: true,
     timeStamps: false,
@@ -662,6 +719,22 @@ Organizations.hasMany(DistOrgs);
 
 DistributorsProducts.hasMany(OpenBottles);
 OpenBottles.belongsTo(DistributorsProducts);
+
+Categories.hasMany(Products);
+Products.belongsTo(Categories);
+
+Subcategories.hasMany(Products);
+Products.belongsTo(Subcategories);
+
+Categories.hasMany(Subcategories);
+Subcategories.belongsTo(Categories);
+
+BtlSize.hasMany(Products);
+Products.belongsTo(BtlSize);
+
+Distributors.hasMany(DistributorsProducts);
+DistributorsProducts.belongsTo(Distributors);
+
 
 
 
