@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Fuse = require('fuse.js');
 const axios = require('axios');
+const atob = require('atob');
+const Blob = require('blob');
 require('dotenv').config();
-
+const IncomingForm = require('formidable').IncomingForm
 const models = require('../app/models/db.js');
 const sample = require('../sample.js');
 
@@ -13,15 +15,17 @@ const {
     CV_REQUEST,
 } = process.env;
 
+
+
 router.post('/photo', (req, res) => {
     const {
-        orgId,
         url,
     } = req.body;
 
     const requestUrl = {
-        url,
-    }   
+        url: blobUrl,
+    };
+
     const bestGuess = {
         matches: [],
         products: [],
@@ -42,8 +46,12 @@ router.post('/photo', (req, res) => {
         minMatchCharLength: 1,
     };
     // let fuse = new Fuse(text, options);
-    
-    axios.post(CV_REQUEST, requestUrl)
+    console.log(boy);
+    axios.post(CV_REQUEST, requestUrl, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
     .then((vision) => {
         let regions = vision.data.regions;
         let unsortedText = [];
