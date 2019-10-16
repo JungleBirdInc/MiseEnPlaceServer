@@ -59,6 +59,31 @@ router.get('/getAll/:orgId', (req, res) => {
             res.status(500).send(error);
         })
 })
+//**********************
+// Add Update Single Bottle
+//**********************
+router.put('/upsert/', (req, res) => {
+    const {
+        id,
+        org_id,
+        product_id,
+        weight,
+    } = req.body;
+    return models.OpenBottles.upsert({
+        id,
+        org_id,
+        product_id,
+        weight,
+    })
+    .then((bottle) => {
+        res.status(201).json(bottle);
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send(error)
+    })
+})
+
 
 //**********************
 // Get a Bottle
@@ -67,25 +92,20 @@ router.get('/:upc', (req, res) => {
     const {
         upc,
     } = req.params;
-    models.Products.findOne({
+    console.log(upc);
+    return models.Products.findOne({
         where: {
             upc,
-        }
-    })
-    .then((bottle) => {
-    return models.OpenBottles.findOne({
-        where: {
-            product_name: bottle.product_name,
         },
         include: [{
             model: models.DistributorsProducts,
             include: [{
-                model: models.Products,
+                model: models.OpenBottles,
             }]
-        }],
-    })
+        }]
     })
     .then((openBottle) => {
+        console.log(openBottle);
         res.status(200).json(openBottle);
     })
     .catch((error) => {
