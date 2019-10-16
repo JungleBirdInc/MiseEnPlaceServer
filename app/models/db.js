@@ -720,6 +720,7 @@ Organizations.hasMany(DistOrgs);
 DistributorsProducts.hasMany(OpenBottles);
 OpenBottles.belongsTo(DistributorsProducts);
 
+
 Categories.hasMany(Products);
 Products.belongsTo(Categories);
 
