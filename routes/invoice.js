@@ -33,8 +33,8 @@ router.post('/record', (req, res) => {
         .then((log) => {
             receiptSet.forEach((receiptItem) => {
                 models.LogsProducts.create({
-                    log_id: log.id,
-                    dist_products_id: receiptItem.id,
+                    logId: log.id,
+                    distributorsProductId: receiptItem.distributorsProductId,
                     qty: receiptItem.qty,
                 });
             });
