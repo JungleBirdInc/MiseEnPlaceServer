@@ -213,12 +213,13 @@ router.put('/updateCurrent/:currentId', (req, res) => {
     const {
         currentSet,
     } = req.body;
-    currentSet.forEach((currentItem) => {
+    console.log(currentSet);
+    req.body.forEach((currentItem) => {
         return models.LogsProducts.upsert({
             id: currentItem.id,
             logId: currentId,
-            distributorsProductId: masterItem.distributorsProductId,
-            qty: currentItem.qty,
+            distributorsProductId: currentItem.distributorsProductId,
+            qty: currentItem.quantity,
         })
             .then((upserted) => {
                 console.log(upserted);
