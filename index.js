@@ -24,6 +24,8 @@ const reps = require('./routes/reps.js');
 const categories = require('./routes/categories.js');
 const forecasting = require('./routes/forecasting.js');
 const scan = require('./routes/scan.js');
+const text = require('./routes/sms.js');
+
 
 const sample = require('./sample.js');
 
@@ -45,12 +47,15 @@ app.use(session({
     secret: 'secret',
     resave: true,
     saveUninitialized: true,
+    
 }));
 
 // date: models.sequelize.literal('CURRENT_TIMESTAMP'),
 
 // Variable that syncs up our two repo paths
+
 const pathway = path.join(__dirname, '../MiseEnPlace/dist/MiseEnPlace');
+
 
 // serve static files
 app.use(express.static(pathway));
@@ -278,6 +283,8 @@ app.use('/forecasting', forecasting);
 */
 
 app.use('/scan', scan);
+
+app.use('/sms', text);
 
 
 
